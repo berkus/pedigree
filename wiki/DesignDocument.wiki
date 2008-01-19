@@ -29,33 +29,35 @@ The Kernel proper will contain only those components always necessary to the sys
 
 (what should go in each directory in the source tree)
 {{{
-|-- build			-- CD into this directory to build Pedigree.
-|-- docs				-- Documentation
-`-- src				-- All source files
-    |-- drivers			-- Drivers, e.g. Ext2, Ethernet, etc etc
-    |-- subsys			-- User mode subsystems
-    |   |-- dos			-- DOS compatibility subsystem
-    |   |-- native			-- Native subsystem – libc etc.
-    |   |-- posix			-- POSIX compatibility subsystem
-    |   `-- security		-- Implements signing of drivers / modules.
-    |-- system			-- All system (kernel+module) files
-    |   |-- boot			-- Bootstrapper
-    |   |-- arch			-- Architecture modules – provides register abstraction etc.
-    |   |-- kernel			-- Kernel
-    |   |   |-- debugger		-- Kernel debugger
-    |   |   |-- devices		-- Consoles etc.
-    |   |   |-- fs			-- Virtual filesystem
-    |   |   |-- machine		-- “Machine state” including IDT and GDT.
-    |   |   |-- memory		-- Virtual and physical memory manager.
-    |   |   `-- process		-- Process and processor management.
-    |   |-- modules		-- Kernel modules, e.g. VFS, network manager.
+|-- build                       -- CD into this directory to build Pedigree.
+|-- docs                        -- Documentation
+`-- src                         -- All source files
+    |-- drivers	                -- Drivers, e.g. Ext2, Ethernet, etc etc
+    |-- subsys                  -- User mode subsystems
+    |   |-- dos                 -- DOS compatibility subsystem
+    |   |-- native              -- Native subsystem – libc etc.
+    |   |-- posix               -- POSIX compatibility subsystem
+    |   `-- security            -- Implements signing of drivers / modules.
+    |-- system                  -- All system (kernel+module) files
+    |   |-- boot                -- Bootstrapper
+    |   |-- kernel              -- Kernel
+    |   |   |-- debugger        -- Kernel debugger
+    |   |   |-- devices         -- Consoles etc.
+    |   |   |-- fs              -- Virtual filesystem
+    |   |   |-- machine         -- “Machine state” including IDT and GDT.
+    |   |   |   |-- x86         -- x86 specific ”machine state”.
+    |   |   |   |-- x86_64      -- x86-64 specific ”machine state”.
+    |   |   |   `-- x86_common  -- ”machine state” common to x86 and x86-64.
+    |   |   |-- memory          -- Virtual and physical memory manager.
+    |   |   `-- process         -- Process and processor management.
+    |   |-- modules             -- Kernel modules, e.g. VFS, network manager.
     |   |   |-- test
     |   |   `-- test2
-    |   `-- utilities		-- Shared container classes, Maps, hashtables, linked lists etc.
+    |   `-- utilities           -- Shared container classes, Maps, hashtables, linked lists etc.
     `-- user
-        |-- applications		-- User space applications. Can be posix or native (or dos)
-        `-- libraries		-- User space libraries.
-            `-- 8086		-- The 8086 emulation library.
+        |-- applications        -- User space applications. Can be posix or native (or dos)
+        `-- libraries           -- User space libraries.
+            `-- 8086            -- The 8086 emulation library.
 }}}
 ===Interface between the boot loader and kernel===
 
