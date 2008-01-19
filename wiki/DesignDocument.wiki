@@ -5,7 +5,9 @@
 =An Initial Design Document on Aims and Organisation=
 
 _Revision history:_
+
 _Initial outline – James Molloy 18-Jan-08_
+
 _Update to reflect Discussion – James Pritchett 18-Jan-08_
 
 ==Aims of the project==
