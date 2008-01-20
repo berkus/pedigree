@@ -16,4 +16,4 @@
   * Basic data structures: list, vector, ... - [Joerg]
 
 =Miscellaneous=
-  * Build system - *unassigned*
+  * Build system - [JamesM]
