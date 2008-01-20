@@ -2,6 +2,6 @@
 
 =James Pritchett=
 
-|| *Age* || ||
-|| *Location* || ||
-|| *Been OSDevving since* || ||
+|| *Age* || 20 ||
+|| *Location* || York, England ||
+|| *Been OSDevving since* || 2001 ||
