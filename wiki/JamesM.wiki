@@ -1,0 +1,7 @@
+#summary James Molloy
+
+=James Molloy=
+
+|| *Age* || 21 ||
+|| *Location* || Manchester/York, England ||
+|| *Been OSDevving since* || October 2006 ||
