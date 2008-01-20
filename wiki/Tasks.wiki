@@ -9,10 +9,10 @@
   * Create initial kernel files, parsing of bootstrap struct etc. - [JamesM]
   * Create basic machine dependent files, providing machine abstraction - [Joerg]
   * Create physical memory manager - [Joerg]
-  * Create virtual memory manager - *unassigned*
+  * Create virtual memory manager - [JamesP]
   * Create kernel debugger - [JamesM]
-  * Write scheduler and create Process/Thread abstraction - *unassigned*
-  * Multiprocessor synchronization primitives - *unassigned*
+  * Write scheduler and create Process/Thread abstraction - [JamesP]
+  * Multiprocessor synchronization primitives - [JamesP]
   * Basic data structures: list, vector, ... - [Joerg]
 
 =Miscellaneous=
