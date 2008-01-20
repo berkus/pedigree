@@ -1,0 +1,7 @@
+#summary James Pritchard
+
+=James Pritchard=
+
+|| *Age* || ||
+|| *Location* || ||
+|| *Been OSDevving since* || ||
