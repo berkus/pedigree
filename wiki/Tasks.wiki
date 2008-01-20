@@ -12,3 +12,8 @@
   * Create virtual memory manager - *unassigned*
   * Create kernel debugger - [JamesM]
   * Write scheduler and create Process/Thread abstraction - *unassigned*
+  * Multiprocessor synchronization primitives - *unassigned*
+  * Basic data structures: list, vector, ... - [Joerg]
+
+=Miscellaneous=
+  * Build system - *unassigned*
