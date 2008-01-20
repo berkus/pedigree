@@ -7,8 +7,8 @@
 =Implementation=
   * Create/port bootstrapper - [JamesP] 
   * Create initial kernel files, parsing of bootstrap struct etc. - [JamesM]
-  * Create basic machine dependent files, providing machine abstraction - *unassigned*
-  * Create physical memory manager - *unassigned*
+  * Create basic machine dependent files, providing machine abstraction - [Joerg]
+  * Create physical memory manager - [Joerg]
   * Create virtual memory manager - *unassigned*
   * Create kernel debugger - [JamesM]
   * Write scheduler and create Process/Thread abstraction - *unassigned*
