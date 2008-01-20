@@ -1,0 +1,4 @@
+#summary Current task status
+
+  * Create design document - _JamesM_, _JamesP_, _bluecode_
+  * Create formal specification - _JamesM_, _JamesP_, _bluecode_
