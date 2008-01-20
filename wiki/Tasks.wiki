@@ -5,10 +5,10 @@
   * Create formal specification - _JamesM_ , _JamesP_ , _bluecode_
 
 =Implementation=
-  * Create/port bootstrapper - _JamesP
-  * Create initial kernel files, parsing of bootstrap struct etc. - _JamesM
+  * Create/port bootstrapper - _JamesP_ 
+  * Create initial kernel files, parsing of bootstrap struct etc. - _JamesM_ 
   * Create basic machine dependent files, providing machine abstraction - *unassigned*
   * Create physical memory manager - *unassigned*
   * Create virtual memory manager - *unassigned*
-  * Create kernel debugger - _JamesM
+  * Create kernel debugger - _JamesM_ 
   * Write scheduler and create Process/Thread abstraction - *unassigned*
