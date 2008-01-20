@@ -17,3 +17,4 @@
 
 =Miscellaneous=
   * Build system - [JamesM]
+  * Regression testing system - [JamesM]
