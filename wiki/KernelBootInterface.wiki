@@ -8,3 +8,8 @@ The bootloader shall pass the kernel a pointer to a structure, on the stack, as 
 || 8 || Memory map entry start ||
 || 8 || Memory map entry length ||
 || || *The above three elements are repeated '_Memory map entry count_' times.* ||
+|| 4 || NUMA domain map entry count ||
+|| 4 || NUMA domain map entry type ||
+|| 8 || NUMA domain map entry start ||
+|| 8 || NUMA domain map entry length ||
+|| || *The above three elements are repeated '_NUMA domain map entry count_' times.* ||
