@@ -1,0 +1,12 @@
+#summary Definition of the interface between the kernel and the bootloader.
+
+The bootloader shall pass the kernel a pointer to a structure, on the stack, as with the _cdecl calling convention. If the bootloader does a jmp to the kernel instead of a call, it will need to also push a dummy return value onto the stack so the parameter is in the correct place.
+
+{{{
+typedef struct KernelBootInterface
+{
+
+
+
+} KernelBootInterface_t;
+}}}
