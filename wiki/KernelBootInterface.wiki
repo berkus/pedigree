@@ -7,4 +7,4 @@ The bootloader shall pass the kernel a pointer to a structure, on the stack, as 
 || 4 || Memory map entry type ||
 || 8 || Memory map entry start ||
 || 8 || Memory map entry length ||
-|| *The above three elements are repeated '_Memory map entry count_' times.* ||
+|| || *The above three elements are repeated '_Memory map entry count_' times.* ||
