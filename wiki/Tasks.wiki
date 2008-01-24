@@ -14,6 +14,9 @@
   * Write scheduler and create Process/Thread abstraction - [JamesP]
   * Multiprocessor synchronization primitives - [JamesP]
   * Basic data structures: list, vector, ... - [Joerg]
+  * Networking (NE2000 and 3c90xC drivers, protocols) - [Matt]
+  * FAT filesystem drivers - [Matt]
+  * Standard Library port - [Matt]
 
 =Miscellaneous=
   * Build system - [JamesM]
