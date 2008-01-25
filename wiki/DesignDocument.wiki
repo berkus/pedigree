@@ -87,5 +87,5 @@ These are not set in stone, but abiding by the same style will ensure consistenc
   * All global functions which are non-trivial should have their own .cc file. The declarations for multiple related global functions can and should be collated in one .h   file.
   * All functions shall be named in lowerCamelCase.
   * All variables shall be named in lowerCamelCase, prefixed by hungarian notation depending on type, for example g_ for a global variable, m_ for a member variable, p for a pointer, and b for a bool, so a member pointer could be called m_pMyPointer.
-  * Every declaration should have an associated comment. The comment should be in `/** ... */` form OR `/// ...` form, so that doxygen can process them. There will be a licence applied to every file, but this has not been decided as yet.
+  * Every declaration should have an associated comment. The comment should be in `/** ... */` form OR `/// ...` form, so that doxygen can process them. The 3-clause BSD license should be applied on the top of every file, see [License].
   * Macros shall be in uppercase, as should any preprocessor flags.
