@@ -1,4 +1,5 @@
 #summary The project's license
+#labels Featured
 
 {{{
 /*
