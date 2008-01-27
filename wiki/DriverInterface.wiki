@@ -6,9 +6,9 @@ All drivers need to implement an I/O interface. This interface needs to support 
 
 All drivers must implement these calls:
   * read: the standard call to read data, should not block
-  * read_b: blocking read call
+  * readBlocking: blocking read call
   * write: the standard call to write data, should not block
-  * write_b: blocking write call
+  * writeBlocking: blocking write call
   * ioctl: permits control of the driver (setting flags and the like)
 
 The following calls are optional, but should be implemented:
