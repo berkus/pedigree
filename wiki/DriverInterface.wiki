@@ -1,13 +1,23 @@
-#summary One-sentence summary of this page.
+#summary Outlines the interface for all driver I/O
 
-= Introduction =
+All drivers need to implement an I/O interface. This interface needs to support blocking and non-blocking calls for reading and writing data, and also allow software to read state information.
 
-Add your content here.
+= Required Function Set =
 
+All drivers must implement these calls:
+  * read: the standard call to read data, should not block
+  * read_b: blocking read call
+  * write: the standard call to write data, should not block
+  * write_b: blocking write call
+  * ioctl: permits control of the driver (setting flags and the like)
 
-= Details =
+The following calls are optional, but should be implemented:
+  * seek: POSIX-style seek
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+The following calls are up for discussion:
+  * open: called to allow the driver to allocate resources for a new client to access
+  * close: called to allow the driver to free resources
+
+= Notes =
+
+This is an inital mockup of ideas that should be discussed. Changes are likely to occur.
