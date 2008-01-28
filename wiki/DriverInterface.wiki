@@ -1,8 +1,10 @@
 #summary Outlines the interface for all driver I/O
 
-All drivers need to implement an I/O interface. This interface needs to support blocking and non-blocking calls for reading and writing data, and also allow software to read state information.
+== Abstract ==
 
-= Required Function Set =
+All drivers need to implement an I/O interface. This interface needs to support blocking and non-blocking calls for reading and writing data, and also allow software to read state information. It also must provide for the kernel to choose when to initialize the driver.
+
+== Required Function Set ==
 
 All drivers must implement these calls:
   * read: the standard call to read data, should not block
@@ -10,6 +12,8 @@ All drivers must implement these calls:
   * write: the standard call to write data, should not block
   * writeBlocking: blocking write call
   * ioctl: permits control of the driver (setting flags and the like)
+  * driverInit: called when the driver is loaded, allows setup and probing for devices
+  * driverDeInit: called when the driver is unloaded, resources should be unallocated
 
 The following calls are optional, but should be implemented:
   * seek: POSIX-style seek
@@ -18,6 +22,6 @@ The following calls are up for discussion:
   * open: called to allow the driver to allocate resources for a new client to access
   * close: called to allow the driver to free resources
 
-= Notes =
+== Notes ==
 
 This is an inital mockup of ideas that should be discussed. Changes are likely to occur.
