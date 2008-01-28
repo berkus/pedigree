@@ -17,6 +17,7 @@
   * Networking (NE2000 and 3c90xC drivers, protocols) - [Matt]
   * FAT filesystem drivers - [Matt]
   * Standard Library port - [Matt]
+  * Module interface and loading - [JamesM]
 
 =Miscellaneous=
   * Build system - [JamesM]
