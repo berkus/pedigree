@@ -4,7 +4,7 @@
 
 All builds are done from the builds/ directory.
 
- pedigree/builds/$ make X86=1
+ pedigree/builds/$ make
 
 The `all` target is called with the makeflag `X86` set to `1`. This does several things - X86 and X86_64 are special and set the cross compiler to use. You must set one of these (and only one). In the C preprocessor for all compiled files, the variable "X86" is #define'd to 1. This works with any string, so you can set bits of #ifdef'd code off and on from the make command line.
 
