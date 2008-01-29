@@ -3,6 +3,7 @@
 =Design=
   * Create design document - [JamesM] , [JamesP] , [Joerg]
   * Create formal specification - [JamesM] , [JamesP] , [Joerg]
+  * Design "central store" - _Unassigned_
 
 =Implementation=
   * Create/port bootstrapper - [JamesP] 
