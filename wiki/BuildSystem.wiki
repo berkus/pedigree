@@ -4,8 +4,19 @@
 
 All builds are done from the builds/ directory.
 
+ pedigree/builds/$ make clean
  pedigree/builds/$ make
 
-The `all` target is called with the makeflag `X86` set to `1`. This does several things - X86 and X86_64 are special and set the cross compiler to use. You must set one of these (and only one). In the C preprocessor for all compiled files, the variable "X86" is #define'd to 1. This works with any string, so you can set bits of #ifdef'd code off and on from the make command line.
+Any flags defined on the command line (e.g. `make DEBUGGER=1 MY_FLAG=1`) will be available as an ifdef in any Makefile, and also available as an #ifdef in any code that gets compiled. If you change make flags, it is highly reccommended that you make clean first, as different directories may be pulled in, and they are only regenerated after a make clean.
 
-All flags 
+The build system automatically pulls in flags from a file called `build/buildFlags`. This file contains newline-seperated flags as they would be put on the command line, so that many flags can be specified without getting repetitive. This flags file is converted into makefile format by a perl script that *should* run whenever buildFlags is changed, but to be on the safe side I reccommend doing a make clean after each change.
+
+==Cross compilers==
+
+The build system uses its own versions of G++, sandboxed so that it can reroute G++'s /includes and /lib directories and generally do things that you wouldn't want done to your normal install!
+
+The build system automatically detects if you have got a compiler installed or not when you try to `make`. If not, it will prompt you to - this is all automated. Apart from a few "do you want to make a compiler cache?" prompts the configure, make and install of the compiler is automated, and your `make` command will run when the compiler is successfully installed. Incidentally compilers get installed in `build/compilers`.
+
+==Running==
+
+The build system updates a floppy disk image in /build/built, and some convenience scripts are provided - `/build/bochs` and `/build/qemu` are shell scripts which run bochs and qemu respectively on the built images.
