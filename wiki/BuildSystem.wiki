@@ -4,8 +4,8 @@
 
 All builds are done from the builds/ directory.
 {{{
-pedigree/builds/$ make clean
-pedigree/builds/$ make
+pedigree/build/$ make clean
+pedigree/build/$ make
 }}}
 
 Any flags defined on the command line (e.g. `make DEBUGGER=1 MY_FLAG=1`) will be available as an ifdef in any Makefile, and also available as an #ifdef in any code that gets compiled. If you change make flags, it is highly reccommended that you make clean first, as different directories may be pulled in, and they are only regenerated after a make clean.
