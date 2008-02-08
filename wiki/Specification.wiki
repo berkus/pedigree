@@ -1,8 +1,22 @@
 #summary Final specification for each aspect of the system.
 
+=Bootstrapper=
+
+
+
+=Kernel-bootstrapper interface=
+
+The final stage of the bootloader will be written in C++, meaning that information can be transferred to the kernel in a class form. The kernel therefore should not have to perform additional processing on any information given it to get it into a useable format.
+
+The bootstrapper will pass a class containing:
+
+  * this
+  * this
+  * and this.
+
 =Kernel internals=
 
-=Kernel-bootloader interface=
+
 
 =Kernel-app interface=
 
