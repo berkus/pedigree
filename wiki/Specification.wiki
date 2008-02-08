@@ -16,11 +16,33 @@ The bootstrapper will pass a class containing:
 
 =Registry=
 
-The 'registry', for want of a better word, is a tree based structure, the leaf nodes of which are arrays key-value pairs.
+The 'registry', for want of a better word, is a tree based structure, the leaf nodes of which are arrays key-value pairs. These pairs range from kernel use only (heap algorithm type, scheduler algorithm etc) to application use. Applications, when querying the registry, will only see a leaf node belonging to them (tree structure is not exposed). Programs are digitally signed, and a program with the same digital signature as another is allowed to view and change key-value pairs in that other's leaf node.
 
 =Kernel internals=
 
+The kernel image is made up of three parts: a debugger, machine specific module, and the kernel proper. The first is optional, and the second may be swapped. All of these parts are compiled as shared objects and are linked in place at runtime by the bootstrapper.
 
+==Debugger==
+
+The debugger shall consist of a CLI, command backend, syscall interface, and  (optionally) a GDB stub.
+
+The CLI shall be designed to run in 80x25 text mode on a monitor/keyboard, or via a serial line). The drivers for these devices (serial port, monitor, keyboard) shall be contained in the debugger, so debugging of "real" device drivers is possible.
+
+The command backend shall try to be as frontend agnostic as possible, by taking input and providing output in char* form. However, a backend function may also take a DebuggerIO* parameter, which will allow it to fully control the output, for example for a scrolling log display or program trace.
+
+==Machine specific interface/module==
+
+==Kernel proper==
+
+===Interchangeable heaps===
+
+===Interchangeable schedulers===
+
+
+
+=Kernel-module interface=
+
+=Module-driver interface=
 
 =Kernel-app interface=
 
