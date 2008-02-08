@@ -14,6 +14,10 @@ The bootstrapper will pass a class containing:
   * this
   * and this.
 
+=Registry=
+
+The 'registry', for want of a better word, is a tree based structure, the leaf nodes of which are arrays key-value pairs.
+
 =Kernel internals=
 
 
