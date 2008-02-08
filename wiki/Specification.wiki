@@ -1,0 +1,19 @@
+#summary Final specification for each aspect of the system.
+
+=Kernel internals=
+
+=Kernel-bootloader interface=
+
+=Kernel-app interface=
+
+=App - Subsystem - Kernel interface=
+
+=Subsystems=
+
+=GUI=
+
+==Mode switching==
+
+==Interface==
+
+=Userland apps=
