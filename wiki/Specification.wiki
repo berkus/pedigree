@@ -169,12 +169,97 @@ We would therefore like some means of distinguishing between several concurrentl
 
 So, When first mapped, every object will register a string comparison with a word-length (32/64 bit) identifier of their choice. This ID will commonly be a pointer to the ELF32, PE or File object they are mapping, as this is logical, although it is not required.
 
-When mapping more memory, for example during a sbrk call, the same identifier will be used when requesting a mapping from the memory map, so that adjoining chunks from the same source can be coalesced.
+When mapping more memory, for example during a sbrk call, the same identifier will be used when requesting a mapping from the memory map, so that adjoining chunks from the same source can be coalesced. _NOTE: Please see section 'File Loaders' for a definition of class FileLoader._
 
 _Interface definitions:_
 
 {{{
+class MemoryMap
+{
+public:
+  /**
+   * Constructor - doesn't need to do much.
+   */
+  MemoryMap();
+  ~MemoryMap();
 
+  /**
+   * Registers an ID with the given description string.
+   * \return true on success, false if the ID was taken, or was zero.
+   * \note Zero is NOT a valid ID.
+   */
+  bool registerID(unsigned int nId, const char *pStr, class FileLoader *pSymbolLookup=0);
+  
+  /**
+   * Unregisters an ID with its description string.
+   */
+  void unregisterID(unsigned int nId);
+  
+  /**
+   * Marks a region of memory as 'mapped'. Takes an associated source ID as
+   * given to registerID.
+   * \return true on success, false if the region is already mapped.
+   */
+  bool map(unsigned int nStart, unsigned int nLength, unsigned int nId);
+  
+  /**
+   * Marks a region of memory previously 'mapped' as now 'unmapped'.
+   * \return true on success, false if no such region existed.
+   */
+  bool unmap(unsigned int nStart);
+  
+  /**
+   * Returns the ID of the region the given address is in. Returns zero otherwise.
+   */
+  unsigned int lookup(unsigned int nAddress);
+  
+  /**
+   * Returns the description string for a given ID.
+   */
+  const char *getDescription(unsigned int nId);
+  
+  /**
+   * Returns the FileLoader for a given ID.
+   */
+  class FileLoader *getFileLoader(unsigned int nId);
+};
+}}}
+
+===File Loaders===
+
+The virtual FileLoader class is an interface for any class which implements the loading of either executable or shared objects into virtual memory.
+
+{{{
+class FileLoader
+{
+public:
+  /**
+   * Constructor. Doesn't do much.
+   */
+  virtual FileLoader() {}
+  virtual ~FileLoader() {}
+
+  /**
+   * This explicit load function allows the use of global concrete objects.
+   * \param pFile Pointer to the contents of the file, in accessible memory. The memory it
+   *              is in is considered temporary and may be destroyed by the caller when this
+   *              function completes.
+   * \param nBufferLength Length of the buffer pointed to by pFile.
+   */
+  virtual bool load(void *pFile, unsigned int nBufferLength) =0;
+  
+  /**
+   * Forces an unmap and cleanup of all mapped regions.
+   */
+  virtual void unload();
+  
+  /**
+   * Looks up the symbol at location 'nAddress'. Returns NULL if none found.
+   * \param[in] nAddress The address to look up.
+   * \param[out] pSymbolStart The start location of the retrieved symbol (Optional).
+   */
+  virtual const char *lookupSymbol(unsigned int nAddress, unsigned int *pSymbolStart);
+};
 }}}
 
 =Kernel-module interface=
