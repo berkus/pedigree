@@ -28,7 +28,7 @@ The debugger shall consist of a CLI, command backend, syscall interface, and  (o
 
 The CLI shall be designed to run in 80x25 text mode on a monitor/keyboard, or via a serial line). The drivers for these devices (serial port, monitor, keyboard) shall be contained in the debugger, so debugging of "real" device drivers is possible.
 
-The command backend shall try to be as frontend agnostic as possible, by taking input and providing output in char* form. However, a backend function may also take a DebuggerIO* parameter, which will allow it to fully control the output, for example for a scrolling log display or program trace.
+The command backend shall try to be as frontend agnostic as possible, by taking input and providing output in char`*` form. However, a backend function may also take a DebuggerIO`*` parameter, which will allow it to fully control the output, for example for a scrolling log display or program trace.
 
 _Interface definitions:_
 
@@ -157,11 +157,25 @@ public:
 
 ==Kernel proper==
 
-===Interchangeable heaps===
+===Heap===
 
 ===Interchangeable schedulers===
 
+===Memory Map===
 
+The memory map is a means of discovering (i) Which bits of address space are free to map, for example, a shared object, and (ii) Which binary/object file to look in when looking up a symbol name.
+
+We would therefore like some means of distinguishing between several concurrently mapped binaries/objects. String descriptions would be the most versatile and descriptive, but string comparisons are slow.
+
+So, When first mapped, every object will register a string comparison with a word-length (32/64 bit) identifier of their choice. This ID will commonly be a pointer to the ELF32, PE or File object they are mapping, as this is logical, although it is not required.
+
+When mapping more memory, for example during a sbrk call, the same identifier will be used when requesting a mapping from the memory map, so that adjoining chunks from the same source can be coalesced.
+
+_Interface definitions:_
+
+{{{
+
+}}}
 
 =Kernel-module interface=
 
