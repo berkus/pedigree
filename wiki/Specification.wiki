@@ -1,5 +1,10 @@
 #summary Final specification for each aspect of the system.
 
+=Notes from bluecode=
+ * Don't use "unsigned int" for a pointer type (class MemoryMap), I'll provide a typedef for this kind of thing I think...
+ * Please use unsigned types if the sign is not needed (string length e.g.)
+ * Please use "const type *" if the value pointed to is not changed by the function call
+
 =Bootstrapper=
 
 
