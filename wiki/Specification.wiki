@@ -30,6 +30,18 @@ The CLI shall be designed to run in 80x25 text mode on a monitor/keyboard, or vi
 
 The command backend shall try to be as frontend agnostic as possible, by taking input and providing output in char`*` form. However, a backend function may also take a DebuggerIO`*` parameter, which will allow it to fully control the output, for example for a scrolling log display or program trace.
 
+==Processor specific interface==
+
+The processor-specific interface must provide the following types in the include file *processor/types.h*:
+ * `(u)int{8, 16, 32}_t`: These types must be of *exactly* the size in bits that is suggested by the name of the type
+ * `(u)intptr_t`: These types must be an integer type of the *exact* size of a pointer (in virtual address space) on that processor
+ * `size_t`: same as in the C standard
+ * `ssize_t`: signed equivalent to size_t
+The following types must be provided if KERNEL_PROCESSOR_NO_64BIT_TYPE is not defined:
+ * `(u)int64_t`: These types must be *exactly* 64bit in size
+The following types must be provided if KERNEL_PROCESSOR_NO_PORT_IO is not defined:
+ * `io_port_t`: This type is used to hold the number of an I/O port
+
 ==Machine specific interface/module==
 
 ==Kernel proper==
