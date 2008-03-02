@@ -19,6 +19,7 @@
   * FAT filesystem drivers - [Matt]
   * Standard Library port - [Matt]
   * Module interface and loading - [JamesM]
+  * VFS - [JamesM]
 
 =Miscellaneous=
   * Build system - [JamesM]
