@@ -77,15 +77,3 @@ Every directory that contains source files should have a file called “director
 CXXSRC += $(SRC)/<the directory I am in relevant to the src/ directory>/myfile.cc
 There are similar variables, ASMSRC, CSRC and OBJ, in case some precompiled object needs to be linked.
 The top level makefile calls down to several others – Makefile.bootstrap, Makefile.kernel and Makefile.modules. The bootstrap makefile makes the bootloader. It contains a DIRECTORIES variable with all directories and subdirectories of src/boot. If you add a new subdirectory, add it to this variable. The same applies for Makefile.kernel. Makefile.modules is called for every module found in src/modules/directory.mk (a variable, MODULES, is created in this file). It is assumed that no module has any subdirectories.
-
-==Style guidelines==
-
-These are not set in stone, but abiding by the same style will ensure consistency.
-===Style of C++ / .h source files===
-  * Classes should be named in UpperCamelCase. Each class should have at the least its own .h file, and unless it is abstract or for some reason has limited functionality, its own .cc file.
-  * All C++ source files should end in either .h or .cc , NOT .cpp.
-  * All global functions which are non-trivial should have their own .cc file. The declarations for multiple related global functions can and should be collated in one .h   file.
-  * All functions shall be named in lowerCamelCase.
-  * All variables shall be named in lowerCamelCase, prefixed by hungarian notation depending on type, for example g_ for a global variable, m_ for a member variable, p for a pointer, and b for a bool, so a member pointer could be called m_pMyPointer.
-  * Every declaration should have an associated comment. The comment should be in `/** ... */` form OR `/// ...` form, so that doxygen can process them. The 3-clause BSD license should be applied on the top of every file, see [License].
-  * Macros shall be in uppercase, as should any preprocessor flags.
