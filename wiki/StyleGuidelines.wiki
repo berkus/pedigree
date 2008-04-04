@@ -1,0 +1,32 @@
+#summary Coding & other style guidelines
+#labels Featured
+
+==Style of C++ / .h source files==
+Every declaration should have an associated comment. The comment should be in
+{{{
+/**
+ * <comment here>
+ * \param ...
+ */
+}}}
+OR
+{{{
+/** <comment here>
+ *\param ... */
+}}}
+form, so that doxygen can process them.
+The 3-clause BSD license should be applied on the top of every file, see [License].
+
+==Coding style==
+  * Classes should be named in UpperCamelCase. Each class should have at the least its own .h file, and unless it is abstract or for some reason has limited functionality, its own .cc file.
+  * All C++ source files should end in either .h or .cc , NOT .cpp.
+  * All global functions which are non-trivial should have their own .cc file. The declarations for multiple related global functions can and should be collated in one .h   file.
+  * All functions shall be named in lowerCamelCase.
+  * All variables shall be named in lowerCamelCase. The name of a variable of array type shall denote that it consists of more than one object of that type. The following prefixes are defined (All other prefixes are prohibited):
+    * `m_` for private member variables
+    * `g_` for global variables
+    * p for pointer variables (excluding types that decay to a pointer type, e.g. arrays)
+    * b for boolean variables
+    * n for integer variables used as a counter
+    * s for integer variables used to denote a size
+  * Macros shall be in uppercase, as should any preprocessor flags.
