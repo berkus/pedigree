@@ -1,0 +1,55 @@
+#summary Porting Pedigree to a new architecture
+
+=To get it to compile at all=
+
+You can temporarily put this at the end of src/system/kernel/Makefile. It goes *before* the "include" statement.
+
+{{{
+ifdef MY_ARCH
+SRCFILES=
+endif
+}}}
+
+You need to put a definition for your arch in the buildFlags file - an example for a little endian 32-bit arch:
+
+{{{
+MY_ARCH: LITTLE_ENDIAN BITS_32
+}}}
+
+You need to tell the build system what compiler you need to use. In build/Makefile:
+
+{{{
+ifdef MY_ARCH
+COMPILER = myarch-elf
+endif
+}}}
+
+...where myarch-elf is the target for the compiler, in proper GNU format. When you type `make`, a compiler will be built and sandboxed for this target.
+
+=Bootloading=
+
+The kernel proper must be started with a pointer to a struct of type "BootstrapInfo_t". It is possible that some bootstrapping has to be done in order to either (a) boot the computer from scratch into a stable state or (b) to convert the state given by another bootloader (e.g. GRUB) into the one accepted by the kernel.
+
+This is done in src/system/boot. You must add a new section to src/system/boot/Makefile to cause make to recurse properly:
+
+{{{
+ifdef MYARCH
+<TAB>cd myarch/; $(MAKE) $(SILENTFLAG)
+endif
+}}}
+
+Most bootstrappers (mips and x86) take the kernel ELF image embedded into themselves and load that themselves. This has the advantage that any section can be loaded - most stock loaders wouldn't load our debug information sections or allow us to gain access to them. (this does not apply to grub).
+
+=Getting some kernel functionality=
+
+Firstly you want to get the arch to the point where you can enter the kernel main() function and sit in an infinite loop.
+
+You'll need to copy/change the processor/x86/types.h file and add a link to it in processor/types.h.
+
+Once you've done that, you can start getting some debugger access. Make a state.cc file in your processor directory and follow the example in x86 and mips to generate an InterruptState and ProcessorState class (ProcessorState can be typedef'd to InterruptState. The big difference between them is that ProcessorState can be instantiated anywhere, whereas InterruptState can only be created manually in assembler (used when creating interrupt frames). The important functions required are get/set{instructionPointer,basePointer,stackPointer}, getNumRegisters, getRegister (for GPR enumeration).
+
+You will need to create a machine in the src/system/kernel/machine directory - use x86 as an example. A serial device and Vga device (if applicable) are what are required. If you don't have a vga device/serial device, have your Machine class return a NULL pointer when requested.
+
+You should now be able to enter the debugger. You can hack in a public constructor for InterruptState for the time being, use that and call `Debugger::instance().start(myState, "fubar");`.
+
+You should then have access to the `dump` command.
