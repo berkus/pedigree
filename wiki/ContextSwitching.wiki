@@ -1,0 +1,11 @@
+#summary Outlines what is entailed by a context switch and how each architecture needs to implement it.
+
+TODO: discuss
+
+= Abstract =
+
+I was thinking this through, and thought a wiki page would be a place to start so that I can get my ideas out without forgetting them. This page will (obviously) be updated as we go.
+
+= Detail =
+
+Each architecture provides a Processor::ContextSwitch implementation, which actually performs the stack switch. This allows the scheduler to be implemented in an abstract way across all architectures.
