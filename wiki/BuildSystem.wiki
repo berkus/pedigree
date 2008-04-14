@@ -1,23 +1,34 @@
 #summary Build system documentation
 
-==Usage==
+=CMake=
 
-All builds are done from the builds/ directory.
+The build system is currently being migrated to use CMake, the cross platform make. Don't be fooled - it's not a replacement for GNU Make - think of it more like an autoconf/automake that doesn't suck major balls.
+
+==Obtaining==
+
+I use some features of CMake which only appear in version 2.6. The current stable version is 2.4, so you'll have to compile from CVS for the moment. *You will need CMake 2.4 (or the latest stable) installed already in order to compile the CVS snapshot of CMake!*. Do this with `sudo apt-get install cmake` or something similar.
+
+Run these commandzors:
+
 {{{
-pedigree/build/$ make clean
-pedigree/build/$ make
+cvs -d :pserver:anonymous@www.cmake.org:/cvsroot/CMake login
+cvs -d :pserver:anonymous@www.cmake.org:/cvsroot/CMake co CMake
+mkdir tmp && cd CMake/tmp
+cmake ../
+make
+sudo make install
 }}}
 
-Any flags defined on the command line (e.g. `make DEBUGGER=1 MY_FLAG=1`) will be available as an ifdef in any Makefile, and also available as an #ifdef in any code that gets compiled. If you change make flags, it is highly reccommended that you make clean first, as different directories may be pulled in, and they are only regenerated after a make clean.
+Remember to close your terminal, as bash caches much stuff, so you won't see the new cmake straight away. Open a new terminal and run `cmake --version` - you should see 2.7 and a date string (today's date). Sweet - you're all running!
 
-The build system automatically pulls in flags from a file called `build/buildFlags`. This file contains newline-seperated flags as they would be put on the command line, so that many flags can be specified without getting repetitive. This flags file is converted into makefile format by a perl script that *should* run whenever buildFlags is changed, but to be on the safe side I reccommend doing a make clean after each change.
+=Building=
 
-==Cross compilers==
+Make yourself a temporary directory - builds in place are teh shits - and run ccmake for the curses-based option editor.
 
-The build system uses its own versions of G++, sandboxed so that it can reroute G++'s /includes and /lib directories and generally do things that you wouldn't want done to your normal install!
+{{{
+mkdir tmp && cd tmp
+ccmake ../
+make
+}}}
 
-The build system automatically detects if you have got a compiler installed or not when you try to `make`. If not, it will prompt you to - this is all automated. Apart from a few "do you want to make a compiler cache?" prompts the configure, make and install of the compiler is automated, and your `make` command will run when the compiler is successfully installed. Incidentally compilers get installed in `build/compilers`.
-
-==Running==
-
-The build system updates a floppy disk image in /build/built, and some convenience scripts are provided - `/build/bochs` and `/build/qemu` are shell scripts which run bochs and qemu respectively on the built images.
+Which should dump a floppy.img or similar file in tmp/.
