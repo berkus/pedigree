@@ -11,7 +11,7 @@ I use some features of CMake which only appear in version 2.6. The current stabl
 Run these commandzors:
 
 {{{
-cvs -d :pserver:anonymous@www.cmake.org:/cvsroot/CMake login
+cvs -d :pserver:anonymous@www.cmake.org:/cvsroot/CMake login  <--- password "cmake"
 cvs -d :pserver:anonymous@www.cmake.org:/cvsroot/CMake co CMake
 mkdir tmp && cd CMake/tmp
 cmake ../
