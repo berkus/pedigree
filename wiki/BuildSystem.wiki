@@ -63,7 +63,7 @@ cd compilers/
 mv /tmp/compilers/* ./
 }}}
 
-You should now be ready to rock.
+You should now be ready to rock. _For God's sake don't decide to take shortcuts and `rm -rf build/` straight away - you'll trash the .svn directory and svn will shout at you for ever and never update._
 
 =Things to watch out for / troubleshooting=
 
