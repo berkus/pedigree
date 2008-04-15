@@ -1,5 +1,7 @@
 #summary Build system documentation
 
+* ZOMG TEH WARNINGZ: Read the "Porting" section BEFORE updating to the new build system from the old one! (before revision r309)! *
+
 =CMake=
 
 The build system is currently being migrated to use CMake, the cross platform make. Don't be fooled - it's not a replacement for GNU Make - think of it more like an autoconf/automake that doesn't suck major balls.
@@ -48,3 +50,21 @@ The buildFlags file has been revamped. It's similar to before in that it has a "
   * All flags are off by default. To change the default to 'On', prepend an asterisk to the start of a line.
 
 To create a buildFlags.cmake file from your buildFlags file, cd into the pedigree root directory and run `scripts/parseBuildFlags.pl`.
+
+=Porting from the old build system=
+
+{{{
+cp -r build/compilers /tmp
+rm -rf /tmp/compilers/.svn
+svn update   <--- this will fail, because it tries to remove build/ but it's not empty.
+rm -rf build/
+svn update <---- should now succeed.
+cd compilers/
+mv /tmp/compilers/* ./
+}}}
+
+You should now be ready to rock.
+
+=Things to watch out for / troubleshooting=
+
+The first time you build a target such as MIPS or ARM, you may/will get an 'error' from cmake saying "Source file autogen.h could not be found". You may safely ignore this. autogen.h will be created when the kernel is created and before the bootloader is built, and once one exists cmake will cease to complain.
