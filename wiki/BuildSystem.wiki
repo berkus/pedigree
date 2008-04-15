@@ -45,4 +45,4 @@ The buildFlags file has been revamped. It's similar to before in that it has a "
 
   * If you encapsulate a left hand flag in [], that flag is marked as "internal" and is not selectable in the GUI. Use this for internal flags that just make your life easier and you don't want toggleable.
   * If you encapsulate a left hand flag in {}, that flag is marked as "advanced". To access it in the GUI, a user has to press 't' (to toggle advanced options).
-  * All flags are off by default. To change the default to 'On', prepend a '\*' to the start of a line.
+  * All flags are off by default. To change the default to 'On', prepend an asterisk to the start of a line.
