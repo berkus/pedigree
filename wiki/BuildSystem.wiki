@@ -27,10 +27,10 @@ Remember to close your terminal, as bash caches much stuff, so you won't see the
 
 =Building=
 
-Make yourself a temporary directory - builds in place are teh shits - and run ccmake for the curses-based option editor.
+cd into the build directory - Builds in place are teh shits - and run ccmake for the curses-based option editor.
 
 {{{
-mkdir tmp && cd tmp
+cd build
 ccmake ../
 make
 }}}
