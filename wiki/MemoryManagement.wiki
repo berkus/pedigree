@@ -1,0 +1,26 @@
+#summary Virtual and physical memory-management
+
+== Physical Memory-Management ==
+
+== Virtual Memory-Management ==
+
+=== Kernel Address Space ===
+
+==== x86 ====
+|| Begin || End || Description ||
+|| 0x00000000 || 0xC0000000 || Reserved for the userspace process ||
+|| 0xC0000000 || 0xC8XXXXXX || The kernel image (code, data, bss sections) ||
+|| 0xC8000000 || 0xD0000000 || The kernel's heap ||
+|| 0xD0000000 || 0xF0000000 || Reserved for memory regions ||
+|| 0xF0000000 || 0xF0400000 || Reserved for the stack of free physical pages ||
+|| 0xFFBFF000 || 0xFFC00000 || This address space's page directory ||
+|| 0xFFC00000 || 0x100000000 || Reserved for this address space's page tables ||
+
+=== x64 ===
+|| Begin || End || Description ||
+|| 0x0000000000000000 || 0x0000800000000000 || Reserved for the userspace process ||
+|| 0xFFFF800000000000 || 0xFFFFXXXXXXXXXXXX || Physical memory ||
+|| 0xFFFFFFFF7FC00000 || 0xFFFFFFFF80000000 || Reserved for the stack of free physical pages (below 4GB) ||
+|| 0xFFFFFFFF80000000 || 0xFFFFFFFF88000000 || The kernel image (code, data, bss sections) ||
+|| 0xFFFFFFFF88000000 || 0xFFFFFFFF90000000 || The kernel's heap ||
+|| 0xFFFFFFFF90000000 || 0xFFFFFFFFF0000000 || Reserved for memory regions ||
