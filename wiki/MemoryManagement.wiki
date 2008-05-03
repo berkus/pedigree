@@ -24,3 +24,17 @@
 || 0xFFFFFFFF80000000 || 0xFFFFFFFF88000000 || The kernel image (code, data, bss sections) ||
 || 0xFFFFFFFF88000000 || 0xFFFFFFFF90000000 || The kernel's heap ||
 || 0xFFFFFFFF90000000 || 0xFFFFFFFFF0000000 || Reserved for memory regions ||
+
+
+==== Mips32 ====
+|| Begin || End || Description ||
+|| 0x00000000 || 0x80000000 || Reserved for the userspace process (KUSEG) ||
+|| 0x80000000 || 0xA0000000 || Kernel accessible area, windowed onto the first 512MB of physical RAM, *Cached* (KSEG0) ||
+|| 0xA0000000 || 0xC0000000 || Kernel accessible area, windowed onto the first 512MB of physical RAM, *Uncached* (KSEG1) ||
+|| 0xC0000000 || 0xFFFFFFFF || Kernel accessible area, paged (KSEG2) ||
+|| 0x80000000 || 0x80100000 || ROM Monitor ||
+|| 0x80100000 || 0x80XXXXXX || Kernel  .code/.data/.bss||
+|| 0xC0000000 || 0xC0100000 || Page table, covering 32-bits (1MB large) ||
+|| 0xC0100000 || 0xCXXXXXXX || Kernel heap ||
+
+It should be noted that the page table is located in the KSEG2 (paged) area. This is so that addresses can be patched up quickly without actually requiring 1MB of physical RAM. In the case where the translation entry for the page table is not itself in the TLB, a double fault is encountered and the kernel (running from KSEG0) loads the relevant piece of page table into the TLB and returns to the user program.
