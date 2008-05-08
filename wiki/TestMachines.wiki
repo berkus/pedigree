@@ -1,6 +1,8 @@
 #summary Test machines
 
 || *Name* || *Owner* || *Architecture* || *Development-critical* || *Description* ||
+|| bluebox || Joerg || X86_64 || Yes || Intel Core2duo, 2GB RAM, nVidia 7950GT Gfx. ||
+|| blueserver || Joerg || X86 || Yes || Intel Pentium4, 512MB RAM, nVidia Ti 4200 Gfx. ||
 || Lister || JamesM || X86_64 || Yes || Intel Core2duo, 2GB RAM, nVidia 8800GTS Gfx. ||
 || Kryten || JamesM || X86 || No || Dual socket motherboard - currently one 900MHz celeron in there but can swap for two 450MHz celerons. Shitty graphics, can't even do 800x600! ||
 || *unnamed* || JamesM || Mipsel || No || Malta/CoreBonito64 mipsel. No gfx card. Serial and ethernet comms. ||
