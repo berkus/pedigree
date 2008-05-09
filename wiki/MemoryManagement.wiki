@@ -9,10 +9,12 @@
 ==== x86 ====
 || Begin || End || Description ||
 || 0x00000000 || 0xC0000000 || Reserved for the userspace process ||
-|| 0xC0000000 || 0xC8XXXXXX || The kernel image (code, data, bss sections) ||
-|| 0xC8000000 || 0xD0000000 || The kernel's heap ||
+|| 0xC0000000 || 0xD0000000 || The kernel's heap ||
 || 0xD0000000 || 0xF0000000 || Reserved for memory regions ||
 || 0xF0000000 || 0xF0400000 || Reserved for the stack of free physical pages ||
+|| 0xFF3F7000 || 0xFF3FF000 || The initial kernel stack ||
+|| 0xFF400000 || 0xFF7FF000 || The kernel image (code, data, bss sections) ||
+|| 0xFF7FF000 || 0xFF800000 || The kernel virtual address space's page directory ||
 || 0xFFBFF000 || 0xFFC00000 || This address space's page directory ||
 || 0xFFC00000 || 0x100000000 || Reserved for this address space's page tables ||
 
