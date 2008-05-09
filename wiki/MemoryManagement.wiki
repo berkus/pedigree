@@ -15,6 +15,7 @@
 || 0xFF3F7000 || 0xFF3FF000 || The initial kernel stack (32kB) ||
 || 0xFF400000 || 0xFF7FF000 || The kernel image (code, data, bss sections) ||
 || 0xFF7FF000 || 0xFF800000 || The kernel virtual address space's page directory ||
+|| 0xFFBFD000 || 0xFFBFF000 || Temporary virtual address space (used to create other virtual address spaces) ||
 || 0xFFBFF000 || 0xFFC00000 || This address space's page directory ||
 || 0xFFC00000 || 0x100000000 || Reserved for this address space's page tables ||
 
