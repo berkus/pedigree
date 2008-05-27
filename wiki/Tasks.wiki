@@ -6,21 +6,20 @@
   * Design "central store" - _Unassigned_
 
 =Implementation=
-  * Create/port bootstrapper - [JamesP] 
-  * Create initial kernel files, parsing of bootstrap struct etc. - [JamesM]
-  * Create basic machine dependent files, providing machine abstraction - [Joerg]
-  * Create physical memory manager - [Joerg]
-  * Create virtual memory manager - [JamesP]
-  * Create kernel debugger - [JamesM]
-  * Write scheduler and create Process/Thread abstraction - [JamesP]
-  * Multiprocessor synchronization primitives - [JamesP]
-  * Basic data structures: list, vector, ... - [Joerg]
+  * ~~Create initial kernel files, parsing of bootstrap struct etc. - [JamesM]~~
+  * ~~Create basic machine dependent files, providing machine abstraction - [Joerg]~~
+  * ~~Create physical memory manager - [Joerg]~~
+  * ~~Create virtual memory manager - [Joerg]~~
+  * ~~Create kernel debugger - [JamesM]~~
+  * ~~Write scheduler and create Process/Thread abstraction - [JamesM]~~
+  * ~~Multiprocessor synchronization primitives - [Joerg]~~
+  * ~~Basic data structures: list, vector, ... - [Joerg]~~
   * Networking (NE2000 and 3c90xC drivers, protocols) - [Matt]
   * FAT filesystem drivers - [Matt]
   * Standard Library port - [Matt]
-  * Module interface and loading - [JamesM]
+  * Module interface and loading - [JamesM], [Joerg]
   * VFS - [JamesM]
 
 =Miscellaneous=
-  * Build system - [JamesM]
+  * ~~Build system - [JamesM]~~
   * Regression testing system - [JamesM]
