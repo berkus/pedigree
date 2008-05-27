@@ -1,0 +1,66 @@
+#summary Getting started with Pedigree - initial checkout and build
+
+=Checking out=
+
+Make sure you have subversion installed, then check out pedigree:
+{{{
+svn checkout http://pedigree.googlecode.com/svn/trunk/ pedigree
+}}}
+
+=Building=
+
+==Prerequisites==
+
+Libgmp and libmpfr are required to compile GCC 4.3.0. If you already have these, skip down to CMake.
+
+===libgmp===
+
+Download it [http://ftp.sunet.se/pub/gnu/gmp/gmp-4.2.2.tar.gz here], and do the standard autoconf setup:
+
+{{{
+tar -xvzf gmp-4.2.2.tar.gz && cd gmp-4.2.2
+./configure
+make
+sudo make install
+}}}
+
+===libmpfr===
+
+Download it [http://www.mpfr.org/mpfr-current/mpfr-2.3.1.tar.gz here], and do the same as above.
+
+===CMake===
+
+We require the 2.7 version of CMake due to some extra features added, which is only 
+available via CVS.
+
+You actually need an older version of CMake installed to compile the new version - on ubuntu/debian systems do `sudo apt-get install cmake` first.
+
+{{{
+cvs -d :pserver:anonymous@www.cmake.org:/cvsroot/CMake login  #<--- password "cmake"
+cvs -d :pserver:anonymous@www.cmake.org:/cvsroot/CMake co CMake
+mkdir CMake/tmp && cd CMake/tmp
+cmake ../
+make
+sudo make install
+}}}
+
+_Note: You must install the ncurses headers first, otherwise the 'ccmake' program won't be made. On a debian/ubuntu system, this entails a `sudo apt-get install libncurses-dev`._
+
+==Compiling==
+
+You may need to open a new shell for the install changes you've made, as bash caches things. `cmake --version` should report 2.7 or higher.
+
+cd into your pedigree/ directory and `mkdir build`. Pedigree is designed for out-of-source builds, so the object files don't mess up the source tree.
+
+{{{
+cd build
+ccmake ..
+}}}
+
+Press 'c' to configure. This should then provide you with a list of options. use the arrow keys to scroll, ENTER to toggle options and the 't' key to toggle extra, more advanced options.
+
+With CMake you change the options you want and then keep pressing 'c' until the 'g' option appears. Then press 'g' to generate the Makefiles.
+
+Pedigree's standard options are for a single core x86 32-bit system. You can change that in this screen. Note that selecting some options will automatically enable other options - for example selecting "PPC_IBOOK" will also select "PPC_COMMON". Also be aware that you can only build for one target at a time, so you can't select e.g. X86 and MIPS32_MALTA. You will be prompted to uncheck one of them.
+
+Once you have generated your makefiles, just type `make` to create them. Depending on your target you should get a floppy.img file created and placed in the build directory, or a kernel or bootloader ELF file.
