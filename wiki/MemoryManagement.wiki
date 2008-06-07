@@ -46,12 +46,12 @@ It should be noted that the page table is located in the KSEG2 (paged) area. Thi
 
 || Begin || End || Description ||
 || 0x00000000 || 0x00003000 || Interrupt vector table ||
-|| 0x00003000 || 0x00800000 || Open Firmware ||
 || 0x00800000 || 0x01000000 || Bootloader ||
-|| 0x01000000 || 0x05000000 || Kernel text/data, and modules ||
-|| 0x05000000 || 0x05100000 || Initial kernel page tables ||
-|| 0x05100000 || 0x05xxxxxx || Processor page table ||
-|| 0x06000000 || 0x10000000 || Unused (as yet) ||
-|| 0x10000000 || 0x20000000 || Kernel heap ||
-|| 0x20000000 || 0x40000000 || Reserved for memory regions ||
-|| 0x40000000 || 0xFFFFFFFF || User accessible space ||
+|| 0x01000000 || 0x80000000 || User accessible space ||
+|| 0x80000000 || 0xA0000000 || OF mapped devices - PCI etc ||
+|| 0xA0000000 || 0xC0000000 || Reserved for memory regions ||
+|| 0xC0000000 || 0xC0100000 || Initial kernel page tables ||
+|| 0xC0100000 || 0xC0xxxxxx || Processor page table ||
+|| 0xD0000000 || 0xE0000000 || Kernel heap ||
+|| 0xE0000000 || 0xF0000000 || Kernel text/data, and modules ||
+|| 0xF0000000 || 0xFFFFFFFF || Open Firmware ||
