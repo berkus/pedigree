@@ -1,0 +1,10 @@
+#summary This outlines design for the network stack.
+
+= Abstract =
+
+This document outlines the design for the network stack that is to be implemented into Pedigree. All network stack related documentation is to be in this document (though more detailed individual features may be in other wiki pages)
+
+
+= Details =
+
+TODO: figure all this stuff out...
