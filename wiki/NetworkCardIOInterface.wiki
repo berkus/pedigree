@@ -14,3 +14,10 @@ Network device drivers should implement:
   * ioctl: should provide an interface to change at least the local IP and preferably the subnet and gateway addresses, also should permit modifying device modes (ie, promiscuous mode)
   * driverInit: probes for the device (either on the PCI bus or on ISA) and sets up local structures
   * driverDeInit: cleans up local structures and (optionally) resets the device
+
+== Potential Problems & Questions ==
+
+  * How are IPs and whatnot allocated, and how does the system use it? Are they really going to be in the 
+  * Network devices (in my opinion) don't need to know about their IP, they just need to send and receive packets (not even necessary to understand WHAT they're sending)
+  * What are these devices installed as in the VFS - "/dev/eth0" et al, or something else?)
+  * Probably the most important thing to figure out is how the network _stack_ interfaces with network _devices_ to provide service - especially when there's more than one card.
