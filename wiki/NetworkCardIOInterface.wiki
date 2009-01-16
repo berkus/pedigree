@@ -21,3 +21,5 @@ Network device drivers should implement:
   * Network devices (in my opinion) don't need to know about their IP, they just need to send and receive packets (not even necessary to understand WHAT they're sending)
   * What are these devices installed as in the VFS - "/dev/eth0" et al, or something else?)
   * Probably the most important thing to figure out is how the network _stack_ interfaces with network _devices_ to provide service - especially when there's more than one card.
+
+Answers to points 2 and 3 - devices are not present in the VFS. The stack interfaces with the device by accessing it through the device tree - There's a Network (: public Device) class in there at the moment that isn't defined as yet - that would contain all network device functions (no ioctls, the actual function names), and the stack would interface through that. All modules/drivers have access to the device tree. --JamesM
