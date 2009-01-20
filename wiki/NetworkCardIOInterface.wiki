@@ -27,4 +27,5 @@ All network device drivers register with the network stack during initialization
   * {get|set}StationInfo may only work with IPv4 addresses initially, as they fit into a uint32_t. Perhaps a structure for station info can be used instead which a caller must fill with information (including IPv4 and IPv6 addresses) and pass to setStationInfo? Naturally, getStationInfo would fill such a structure.
   * getPacket only reads in a packet, getPacketSize returns the size of the packet. What happens if, between getPacketSize and getPacket a task switch occurs, and the new thread successfully retrieves a packet?
 
-An alternative solution to this is to continue passing around the packet pointer (allocated when the packet is first added to the queue) until it reaches an "endpoint" (ie, ICMP) where it is freed. This sounds like a great way to introduce memory leaks into the system, though.
+    An alternative solution to this is to continue passing around the packet pointer (allocated when the packet is first added to the queue) until it reaches an "endpoint" (ie, ICMP) where it is freed. This sounds like a great way to introduce memory leaks into the system, though.
+  * As stated in NetworkStack, what if rather than exposing getPacket and getPacketSize, the device driver directly calls a NetworkStack method when a packet arrives?
