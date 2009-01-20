@@ -7,4 +7,16 @@ This document outlines the design for the network stack that is to be implemente
 
 = Details =
 
-TODO: figure all this stuff out...
+Ideas...
+
+A class base for the network stack (something like NetworkStack) handles all the main functionality.
+
+Each individual protocol is handled by an individual class (ie, NetworkTcp, or even just Tcp) which provides functionality via a static instance (Tcp::instance()).
+
+NetworkStack knows about each of these protocols (as does each of the other protocols, so Ip can pass on to Udp and Tcp, as an example).
+
+Sending a packet to the network could be done either via NetworkStack (to provide abstraction) or via the protocol object itself (Tcp::instance().send, for instance).
+
+Receiving goes through the stack, where NetworkStack passes onto Ethernet, then Ethernet onto Arp, Ip, and so on.
+
+What if device drivers call NetworkStack::receive directly when a packet arrives? That stops a requirement for getPacket, as the network stack receives the packet straight from the device driver. It also makes it more event-based and means no polling for packets.
