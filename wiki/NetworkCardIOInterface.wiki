@@ -6,20 +6,25 @@ See DriverInterface for information about the driver I/O interface.
 
 == Interface Definition ==
 
-Network device drivers should implement:
-  * read: reads packets into a buffer, the count parameter states how many packets to read in, does not block
-  * readBlocking: same as read, except blocks
-  * write: writes packets from a buffer to the device, again, the count parameter states how many packets to write, does not block
-  * writeBlocking: same as write, blocks
-  * ioctl: should provide an interface to change at least the local IP and preferably the subnet and gateway addresses, also should permit modifying device modes (ie, promiscuous mode)
-  * driverInit: probes for the device (either on the PCI bus or on ISA) and sets up local structures
-  * driverDeInit: cleans up local structures and (optionally) resets the device
+Network device drivers should inherit Network (machine/Network.h).
+
+The provided (base) functionality is as follows:
+
+  * getPacket: retrieves a packet from the front of the internal queue and returns it
+  * getPacketSize: retrieves the size of the packet to be returned by getPacket (for buffer allocation)
+  * sendPacket: sends a packet to the network
+  * setStationInfo: sets information about this device, such as an IP
+  * getStationInfo: retrieves the above information
+
+Each device will also have internal methods and attributes in order to receive/send packets, that are device-specific and therefore not outlined here.
+
+== Integration ==
+
+All network device drivers register with the network stack during initialization. In comparison to AtaDisk (as an example), the network stack does not know about any cards until they register with it.
 
 == Potential Problems & Questions ==
 
-  * How are IPs and whatnot allocated, and how does the system use it? Are they really going to be in the 
-  * Network devices (in my opinion) don't need to know about their IP, they just need to send and receive packets (not even necessary to understand WHAT they're sending)
-  * What are these devices installed as in the VFS - "/dev/eth0" et al, or something else?)
-  * Probably the most important thing to figure out is how the network _stack_ interfaces with network _devices_ to provide service - especially when there's more than one card.
+  * {get|set}StationInfo may only work with IPv4 addresses initially, as they fit into a uint32_t. Perhaps a structure for station info can be used instead which a caller must fill with information (including IPv4 and IPv6 addresses) and pass to setStationInfo? Naturally, getStationInfo would fill such a structure.
+  * getPacket only reads in a packet, getPacketSize returns the size of the packet. What happens if, between getPacketSize and getPacket a task switch occurs, and the new thread successfully retrieves a packet?
 
-Answers to points 2 and 3 - devices are not present in the VFS. The stack interfaces with the device by accessing it through the device tree - There's a Network (: public Device) class in there at the moment that isn't defined as yet - that would contain all network device functions (no ioctls, the actual function names), and the stack would interface through that. All modules/drivers have access to the device tree. --JamesM
+An alternative solution to this is to continue passing around the packet pointer (allocated when the packet is first added to the queue) until it reaches an "endpoint" (ie, ICMP) where it is freed. This sounds like a great way to introduce memory leaks into the system, though.
