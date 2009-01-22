@@ -1,10 +1,7 @@
 #summary Current task status
 
 =Design=
-  * Create design document - [JamesM] , [JamesP] , [Joerg]
-  * Create formal specification - [JamesM] , [JamesP] , [Joerg]
-  * Design "central store" - _Unassigned_
-
+  * ~~Create design document - [JamesM] , [JamesP] , [Joerg]~~
 =Implementation=
   * ~~Create initial kernel files, parsing of bootstrap struct etc. - [JamesM]~~
   * ~~Create basic machine dependent files, providing machine abstraction - [Joerg]~~
@@ -14,11 +11,23 @@
   * ~~Write scheduler and create Process/Thread abstraction - [JamesM]~~
   * ~~Multiprocessor synchronization primitives - [Joerg]~~
   * ~~Basic data structures: list, vector, ... - [Joerg]~~
-  * Networking (NE2000 and 3c90xC drivers, protocols) - [Matt]
-  * FAT filesystem drivers - [Matt]
-  * Standard Library port - [Matt]
-  * Module interface and loading - [JamesM], [Joerg]
-  * VFS - [JamesM]
+  * Networking (NE2000 and 3c90xC drivers, protocols) - [Matt] - *In progress*
+  * ~~FAT filesystem drivers - [Matt]~~
+  * ~~Standard Library port - [JamesM]~~
+  * ~~Module interface and loading - [JamesM]~~
+  * ~~VFS - [JamesM]~~
+  * PPC needs shared libary loading - [JamesM]
+  * x64 needs module loading, shared library loading, syscall managing, etc. - [JamesM]
+  * VBE driver -- [JamesM] - *In progress*
+  * TCP -- [Matt] - *In progess*
+  * Signals -- _Unassigned_
+  * Caching -- [Matt], [JamesM]
+  * Full VT100 emulation - colours, cursor etc -- [JamesM]
+
+=Bugs - urgent=
+  * Fix syscall errors not propagating to errno -- _Unassigned_
+  * Kill tasks on page fault, not enter debugger. -- _Unassigned_
+  * Generally improve the verbosity of error messages - catch 'em early. -- _Unassigned_
 
 =Miscellaneous=
   * ~~Build system - [JamesM]~~
