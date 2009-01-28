@@ -22,9 +22,11 @@
   * TCP -- [Matt] - *In progess*
   * Signals -- _Unassigned_
   * Caching -- [Matt], [JamesM]
-  * Full VT100 emulation - colours, cursor etc -- [JamesM]
+  * Full VT100 emulation - colours, cursor etc -- [JamesM] -- *In progress*
   * Permissions system -- _Unassigned_
-  * Settings system - read from file? accessible by a specific class -- [JamesM]
+  * Settings system - read from file? accessible by a specific class -- _Unassigned_
+  * Refactor of KernelElf, Elf32, Elf64 and FileLoader -- [JamesM] -- *In progress*, see /branches/elf-refactor
+  * Refactor of path search algorithm -- _Unassigned_
 
 =Bugs - urgent=
   * Fix syscall errors not propagating to errno -- _Unassigned_
