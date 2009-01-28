@@ -27,6 +27,7 @@
   * Settings system - read from file? accessible by a specific class -- _Unassigned_
   * Refactor of KernelElf, Elf32, Elf64 and FileLoader -- [JamesM] -- *In progress*, see /branches/elf-refactor
   * Refactor of path search algorithm -- _Unassigned_
+  * Implement getcwd _ourselves_, so we can resolve drive identifiers easier.
 
 =Bugs - urgent=
   * Fix syscall errors not propagating to errno -- _Unassigned_
