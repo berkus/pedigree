@@ -37,3 +37,7 @@ A typical UDP server application might do the following:
   * Each iteration of this loop will involve reading the packet data (in the case of Endpoint::dataReady) and then performing an action on it. For purposes of this example, the payload is a request for data.
   * The server places the data into a packet, and sends it back via Endpoint::send.
   * This loop continues until the server ends, where it returns the Endpoint to UdpManager.
+
+In further consideration this could easily be applied to ICMP (IcmpManager).
+
+Basically, to use Udp again as an example, Udp is the *protocol* which provides protocol-level functionality - basically sending and receiving packets. UdpManager controls the upper layer of the protocol - redirecting packets to Endpoints. And finally, UdpEndpoint is the application interface to the UDP protocol.
