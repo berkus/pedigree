@@ -20,3 +20,20 @@ Sending a packet to the network could be done either via NetworkStack (to provid
 Receiving goes through the stack, where NetworkStack passes onto Ethernet, then Ethernet onto Arp, Ip, and so on.
 
 What if device drivers call NetworkStack::receive directly when a packet arrives? That stops a requirement for getPacket, as the network stack receives the packet straight from the device driver. It also makes it more event-based and means no polling for packets.
+
+** Latest Ideas **
+
+Things like UDP and TCP have a concept of ports, which are for purposes of the following ideas just like linear queues.
+
+UDP will be used for all description, however the concept applies to TCP (to an extent).
+
+If we consider a port to be an "Endpoint", then each incoming packet needs to go to an Endpoint. This Endpoint may not be a valid port, that's not a problem - the packet can be discarded in a "catchall" Endpoint.
+
+Each Endpoint has a port and a packet queue. It also has access to the UDP protocol layer in order to send packets via UDP. Incoming packets can be read by applications (or socket layers) by interfacing directly with the Endpoint. All protocols that require Endpoints (for now, UDP and TCP) also provide a "Manager" object (UdpManager, TcpManager) which keeps track of all Endpoints.
+
+A typical UDP server application might do the following:
+  * Query UdpManager for an Endpoint on port 1337. UdpManager finds this port is unusued, creates a new Endpoint, and returns it.
+  * Enter into a main loop of some sort. This sort of loop most likely just spins on Endpoint::receive, or perhaps Endpoint::dataReady - both of which will probably be blocking calls (a single parameter to dataReady might state whether to block or not).
+  * Each iteration of this loop will involve reading the packet data (in the case of Endpoint::dataReady) and then performing an action on it. For purposes of this example, the payload is a request for data.
+  * The server places the data into a packet, and sends it back via Endpoint::send.
+  * This loop continues until the server ends, where it returns the Endpoint to UdpManager.
