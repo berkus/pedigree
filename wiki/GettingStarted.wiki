@@ -31,30 +31,26 @@ Download it [http://www.mpfr.org/mpfr-current/mpfr-2.3.1.tar.gz here], and do th
 
 ===CMake===
 
-We require the 2.7 version of CMake due to some extra features added, which is only 
-available via CVS.
-
-You actually need an older version of CMake installed to compile the new version - on ubuntu/debian systems do `sudo apt-get install cmake` first.
+We require the 2.6 version of CMake. Most distros now ship 2.6, if not you'll have to compile it from source.
 
 {{{
-cvs -d :pserver:anonymous@www.cmake.org:/cvsroot/CMake login  #<--- password "cmake"
-cvs -d :pserver:anonymous@www.cmake.org:/cvsroot/CMake co CMake
-mkdir CMake/tmp && cd CMake/tmp
-cmake ../
-make
-sudo make install
+sudo apt-get install libncurses-dev cmake # For ubuntu/debian users
 }}}
-
-_Note: You must install the ncurses headers first, otherwise the 'ccmake' program won't be made. On a debian/ubuntu system, this entails a `sudo apt-get install libncurses-dev`._
 
 ==Compiling==
 
-You may need to open a new shell for the install changes you've made, as bash caches things. `cmake --version` should report 2.7 or higher.
-
-cd into your pedigree/ directory and `mkdir build`. Pedigree is designed for out-of-source builds, so the object files don't mess up the source tree.
+`cd` into your pedigree/ directory and `mkdir build`. Pedigree is designed for out-of-source builds, so the object files don't mess up the source tree.
 
 {{{
 cd build
+cmake -DCROSS=/path/to/your/compilers/i686-elf- ..
+}}}
+
+`-DCROSS` should be set to the location of your compiler, with the 'gcc' stubbed out (so that any compiler tool (g++, ld) can be substituted). Pedigree will run a --version on this toolchain to build for the appropriate architecture. You will need an amd64 compiler to compile for x86-64, and a seperate i[3456]86 compiler for 32-bit x86.
+
+You can then graphically configure pedigree by;
+
+{{{
 ccmake ..
 }}}
 
@@ -62,6 +58,15 @@ Press 'c' to configure. This should then provide you with a list of options. use
 
 With CMake you change the options you want and then keep pressing 'c' until the 'g' option appears. Then press 'g' to generate the Makefiles.
 
-Pedigree's standard options are for a single core x86 32-bit system. You can change that in this screen. Note that selecting some options will automatically enable other options - for example selecting "PPC_IBOOK" will also select "PPC_COMMON". Also be aware that you can only build for one target at a time, so you can't select e.g. X86 and MIPS32_MALTA. You will be prompted to uncheck one of them.
-
 Once you have generated your makefiles, just type `make` to create them. Depending on your target you should get a floppy.img file created and placed in the build directory, or a kernel or bootloader ELF file.
+
+==Running in emulators==
+
+Scripts are provided to run emulators with standard settings - from the build directory;
+
+{{{
+../scripts/qemu
+../scripts/bochs
+}}}
+
+A .vdi image is created for use with VirtualBox, and a .vmdk is created for use with VMWare also.
