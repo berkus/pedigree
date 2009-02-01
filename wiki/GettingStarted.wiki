@@ -10,26 +10,7 @@ svn checkout http://pedigree.googlecode.com/svn/trunk/ pedigree
 
 =Building=
 
-==Prerequisites==
-
-Libgmp and libmpfr are required to compile GCC 4.3.0. If you already have these, skip down to CMake.
-
-===libgmp===
-
-Download it [http://ftp.sunet.se/pub/gnu/gmp/gmp-4.2.2.tar.gz here], and do the standard autoconf setup:
-
-{{{
-tar -xvzf gmp-4.2.2.tar.gz && cd gmp-4.2.2
-./configure
-make
-sudo make install
-}}}
-
-===libmpfr===
-
-Download it [http://www.mpfr.org/mpfr-current/mpfr-2.3.1.tar.gz here], and do the same as above.
-
-===CMake===
+==CMake==
 
 We require the 2.6 version of CMake. Most distros now ship 2.6, if not you'll have to compile it from source.
 
