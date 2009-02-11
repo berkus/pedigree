@@ -30,7 +30,7 @@
   * Implement getcwd _ourselves_, so we can resolve drive identifiers easier.
 
 =Bugs - urgent=
-  * Fix syscall errors not propagating to errno -- _Unassigned_
+  * ~~Fix syscall errors not propagating to errno -- JamesM~~
   * Kill tasks on page fault, not enter debugger. -- _Unassigned_
   * Generally improve the verbosity of error messages - catch 'em early. -- _Unassigned_
 
