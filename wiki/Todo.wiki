@@ -1,3 +1,0 @@
-#summary Todo list
-
-  * Implement lazy binding in the dynamic linker of PLT relocations.
