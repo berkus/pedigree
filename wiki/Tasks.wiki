@@ -28,6 +28,10 @@
   * Refactor of KernelElf, Elf32, Elf64 and FileLoader -- [JamesM] -- *In progress*, see /branches/elf-refactor
   * Refactor of path search algorithm -- _Unassigned_
   * Implement getcwd _ourselves_, so we can resolve drive identifiers easier.
+  * Implement lazy binding in the dynamic linker of PLT relocations. -- _JamesM_
+  * String class should handle UTF8 properly, and all algorithms that currently operate on char*s should be ported. Also String should get some nice shiny new member functions (like operator== :/)
+  * Filesystem write support.
+  * Ext2 driver should handle sparse files.
 
 =Bugs - urgent=
   * ~~Fix syscall errors not propagating to errno -- JamesM~~
