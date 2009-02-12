@@ -25,7 +25,7 @@ The 3-clause BSD license should be applied on the top of every file, see [Licens
   * All variables shall be named in lowerCamelCase. The name of a variable of array type shall denote that it consists of more than one object of that type. The following prefixes are defined (All other prefixes are prohibited):
     * `m_` for private member variables
     * `g_` for global variables
-    * p for pointer variables (excluding types that decay to a pointer type, e.g. arrays)
+    * p for pointer variables (including types that decay to a pointer type, e.g. arrays)
     * b for boolean variables
     * n for integer variables used as a counter
     * s for integer variables used to denote a size
