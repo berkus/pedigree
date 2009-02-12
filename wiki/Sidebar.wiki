@@ -1,6 +1,6 @@
 #summary Sidebar
 
-=Introduction=
+==Quick links==
 
 [GettingStarted Getting Started]
 
