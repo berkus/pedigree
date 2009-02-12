@@ -1,0 +1,9 @@
+#summary Project members
+
+=Contributors=
+
+The current project members are [JamesM], [Matt], and [Adam]. Historically, the project was created by [JamesM], [Joerg] and to a small extent [JamesP].
+
+=Copyright=
+
+The copyright belongs to [JamesM], [Joerg] and [Matt].
