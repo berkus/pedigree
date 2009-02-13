@@ -51,3 +51,42 @@ Things to note:
   * Utility classes (in `src/system/include/utilities`) all use dynamic memory. That's List, RangeList, Tree, Cache, etc. Watch out ;)
 
 == 4. Syscall time tracer ==
+
+I like this one. It sounds fun :-)
+
+Some of our syscalls are *dog slow*. I know why they are, mostly. (Mainly it's due to lack of disk cache which kills pretty much everything). I would like to know, however, what's slowing us down. Optimising feels much better when you have shiny numbers to compare and can make a spreadsheet with pretty colours! ;)
+
+What I'd like is a system that would be enabled by a compile flag (off by default). Every function should be able to have a call at its start to trace the time of execution / number of times called etc, something similar to:
+
+{{{
+void mySyscallFunction(int foo)
+{
+  TRACE();
+
+  ... codez ...
+}
+}}}
+
+Ideally the results should be able to be shown after each TRACE has completed in the log (if enabled, again a compile flag would be ideal), and also in the debugger, so that means implementing a DebuggerCommand.
+
+Areas to look at:
+  * `src/system/kernel/debugger` - Contains all the debugger stuff, your tracing code should probably go here too (.h and .cc).
+  * `src/system/kernel/debugger/DebuggerCommand.h` - What a debugger command must derive from.
+  * `src/system/kernel/debugger/commands` - Where all the debugger commands live. Look in here for examples. Your debugger command should live here (try and seperate the tracing code (in /kernel/debugger) and the command/UI code (in /kernel/debugger/commands)
+  * `src/system/include/machine/Timer.h` - A timer class.
+  * `src/system/include/machine/Machine.h` - The machine class. You can get at a Timer from here. See the Kernel Log (`src/system/kernel/Log.cc`) for an example of its use.
+
+Ideas from my tiny brain:
+  * If TRACE is a macro, you can use __FILE__, __LINE__, __FUNC__(?) etc to make nice information without having to explicitly write it in the function
+  * If TRACE expanded out to an object, for example:
+{{{
+#define TRACE MyTracerObject __tracerObject__;
+}}}
+then you could use the destructor of the object to terminate the trace when the object goes out of scope (i.e. function finishes) automatically.
+
+
+That last one sounds like fun actually :P
+
+Have fun! Feel free to ask me anything!
+
+James
