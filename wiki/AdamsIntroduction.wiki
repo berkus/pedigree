@@ -13,3 +13,19 @@ Areas to look at:
   * `src/system/modules/vfs/Filesystem.cc` is where the magic happens. A File object will call the Filesystem its implementation inherits from to pass a read/write/bleh call down the FS stack. the write() function here is your chokepoint where you can stop all writes if needs be.
   * `src/system/include/syscallError.h` defines the macro you'll need to use. It merely sets errno, it doesn't change control flow (so a return; is needed too).
   * `src/system/include/errors.h` defines the error numbers you can pass to SYSCALL_ERROR.
+
+== 2. Page fault handler ==
+
+Currently when a page fault occurs, if the debugger is enabled it is jumped to, else the system panics.
+
+We need a dedicated handler that can decide what to do. We'll need this to implement copy-on-write and mmapping, so it needs to be there.
+
+For the moment, the best plan would be to check if there's a thread running (i.e. panic if we're in the early stages of boot), print a descriptive error to the kernel log and kill the task outright. We can deal with SIGSEGV etc at a later date when we've actually implemented signals.
+
+Areas to look at:
+  * `src/system/include/processor/InterruptManager.h` contains the abstract header for an InterruptManager.
+  * `src/system/include/processor/InterruptHandler.h` contains the abstract InterruptHandler class, that any interrupt handler must derive.
+  * `src/system/kernel/core/processor/x86` is the directory that contains all the processor-specific code for the IA32 architecture. This is where the header and implementation of your solution should go.
+  * `src/system/kernel/core/processor/x86/InterruptManager.cc` is the actual manager implementation.
+  * `src/system/include/process/Process.h` the Process class, including a cunningly named "void kill();" member.
+  * `src/system/include/Log.h` defines the macros for adding stuff to the kernel log.
