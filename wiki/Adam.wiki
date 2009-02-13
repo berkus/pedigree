@@ -2,6 +2,6 @@
 
 =Adam Jones=
 
-|| *Age* || ## ||
-|| *Location* || ## ||
-|| *Been OSDevving since* || ## ||
+|| *Age* || 27 ||
+|| *Location* || Devon, UK ||
+|| *Been OSDevving since* || Summer 2004 ||
