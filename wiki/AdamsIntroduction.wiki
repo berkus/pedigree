@@ -29,3 +29,25 @@ Areas to look at:
   * `src/system/kernel/core/processor/x86/InterruptManager.cc` is the actual manager implementation.
   * `src/system/include/process/Process.h` the Process class, including a cunningly named "void kill();" member.
   * `src/system/include/Log.h` defines the macros for adding stuff to the kernel log.
+
+== 3. Debug frame information for modules ==
+
+We have two methods for call backtracing - the "normal" EBP chain, and the default, which is to use DWARF-2.
+
+DWARF is the debugging standard. We use a particular part of the DWARF info, the debug_table section, to help us backtrace. It allows us to backtrace when -fomit-framepointer is enabled, and also on *any* platform. It's platform independent. So we have one backtracer for x86, x86_64, powerpc, mips, and arm (!)
+
+The problem is that we currently don't load in DWARF information for loaded modules. More correctly, the information is loaded into memory, but the backtracer is never informed of it.
+
+It would be nice if the debug tables were retrievable - that is, KernelElf (a specicialised Elf class that can load modules and is generally for the Kernel Elf as opposed to module/program Elfs) already maintains a list of all loaded modules. It should be fairly easy to expose this list so that the backtracer can cycle through them.
+
+Areas to look at:
+  * `src/system/include/linker/Elf32.h`, `KernelElf.h` - headers for Elf32 and KernelElf. There is currently a large refactoring operation going on involving the ELF loaders; Elf64 and Elf32 are to be rolled into one class. I'm doing this, albeit slowly, so watch out for code changes. The API should stay the same.
+  * `src/system/kernel/linker/Elf32.cc`, `KernelElf.cc` - implementation files for the above.
+  * `src/system/kernel/debugger/Backtrace.h`, `Backtrace.cc` - the backtracer.
+  * `src/system/kernel/debugger/DwarfUnwinder.h` The DWARF unwinder class.
+
+Things to note:
+  * *Dynamic memory can not be used in the debugger.* If the heap is corrupted, we want to know why. We don't want to use it or we'll page fault again! Dynamic memory *can* be used in KernelElf and Elf, but ensure it is not used in the constructor or any function that could be called from the debugger. (Remember the constructor is called before dynamic memory is enabled).
+  * Utility classes (in `src/system/include/utilities`) all use dynamic memory. That's List, RangeList, Tree, Cache, etc. Watch out ;)
+
+== 4. Syscall time tracer ==
