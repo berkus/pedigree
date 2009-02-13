@@ -1,0 +1,15 @@
+#summary Adam's introduction to Pedigree.
+
+I've tried to create a set of tasks that (a) need doing and (b) will help you see most of the codebase in a progressive manner. Any questions, just give me a shout.
+
+The tasks go from ridonkulously easy to fairly challenging - let me know if you think I'm being patronising! :(
+
+== 1. Add a "read only" flag to filesystems ==
+
+At the moment, a filesystem cannot be mounted read only. This poses a problem, as we currently don't have write capability (left till later so we don't cripple our HDDs accidentally ;) ). I'd like a function in Filesystem that will set the "read-only-ness", and if a write() occurs on a readonly FS, a syscall error should be generated.
+
+Areas to look at:
+  * `src/system/modules/vfs` contains the entire virtual filesystem. It's small, as we use a "windows-style" FS with drives instead of mountpoints. This simplifies things and allows us to pawn off some checking etc to the filesystem implementations instead of the VFS.
+  * `src/system/modules/vfs/Filesystem.cc` is where the magic happens. A File object will call the Filesystem its implementation inherits from to pass a read/write/bleh call down the FS stack. the write() function here is your chokepoint where you can stop all writes if needs be.
+  * `src/system/include/syscallError.h` defines the macro you'll need to use. It merely sets errno, it doesn't change control flow (so a return; is needed too).
+  * `src/system/include/errors.h` defines the error numbers you can pass to SYSCALL_ERROR.
