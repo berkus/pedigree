@@ -11,6 +11,8 @@
   * Ext2 driver should handle sparse files.
   * Kill tasks on page fault, not enter debugger. -- _Unassigned_
   * Generally improve the verbosity of error messages - catch 'em early. -- _Unassigned_
+  * Add SSE/MMX support.
+  * Add floating point support.
 
 =Assigned to JamesM=
 
