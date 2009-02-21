@@ -25,9 +25,12 @@
   * ~~Implement lazy binding in the dynamic linker of PLT relocations. -- [JamesM]~~
 
 =Assigned to Matt=
-  * TCP -- [Matt] - *In progess*
+  * ~~ TCP -- [Matt] ~~
   * Caching -- [Matt], [JamesM]
   * DHCP daemon rather than one-time client -- [Matt]
+  * TCP retransmission queue (proper implementation) -- [Matt] -- *In progress*
+  * Networking system calls -- [Matt] -- *In progress*
+  * Sockets -- [Matt] or [JamesM]
 
 =Assigned to Adam=
 
