@@ -2,8 +2,6 @@
 
 =Open=
 
-  * Signals -- _Unassigned_
-  * Permissions system -- _Unassigned_
   * Options/config system -- _Unassigned_
   * Refactor of path search algorithm -- _Unassigned_
   * String class should handle UTF8 properly, and all algorithms that currently operate on char*s should be ported. Also String should get some nice shiny new member functions (like operator== :/)
@@ -18,14 +16,14 @@
 
   * PPC needs shared libary loading - [JamesM]
   * x64 needs module loading, shared library loading, syscall managing, etc. - [JamesM], [Adam]
+  * Permissions system -- [JamesM]
+  * Ext2 write support -- [JamesM]
 
 =Assigned to Matt=
-  * ~~ TCP -- [Matt] ~~
-  * Caching -- [Matt], [JamesM]
   * DHCP daemon rather than one-time client -- [Matt]
   * TCP retransmission queue (proper implementation) -- [Matt] -- *In progress*
-  * ~~ Networking system calls -- [Matt] -- ~~
   * Sockets -- [Matt] or [JamesM] -- *In progress*
+  * Signals -- [Matt]
 
 =Assigned to Adam=
 
