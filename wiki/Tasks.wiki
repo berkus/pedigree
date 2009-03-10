@@ -18,11 +18,6 @@
 
   * PPC needs shared libary loading - [JamesM]
   * x64 needs module loading, shared library loading, syscall managing, etc. - [JamesM], [Adam]
-  * Caching -- [Matt], [JamesM]
-  * ~~Full VT100 emulation - colours, cursor etc -- [JamesM] ~~
-  * Refactor of KernelElf, Elf32, Elf64 and FileLoader -- [JamesM] -- *In progress*
-  * ~~VBE driver -- [JamesM] ~~
-  * ~~Implement lazy binding in the dynamic linker of PLT relocations. -- [JamesM]~~
 
 =Assigned to Matt=
   * ~~ TCP -- [Matt] ~~
