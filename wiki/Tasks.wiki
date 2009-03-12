@@ -5,7 +5,7 @@
   * Options/config system -- _Unassigned_
   * Refactor of path search algorithm -- _Unassigned_
   * String class should handle UTF8 properly, and all algorithms that currently operate on char*s should be ported. Also String should get some nice shiny new member functions (like operator== :/)
-  * Filesystem write support.
+  * Filesystem write support. -- [Matt], [JamesM], [Adam]
   * Ext2 driver should handle sparse files.
   * Kill tasks on page fault, not enter debugger. -- _Unassigned_
   * Generally improve the verbosity of error messages - catch 'em early. -- _Unassigned_
@@ -24,6 +24,7 @@
   * TCP retransmission queue (proper implementation) -- [Matt] -- *In progress*
   * Sockets -- [Matt] or [JamesM] -- *In progress*
   * Signals -- [Matt]
+  * Complete FAT (file creation and deletion, tested writing) -- [Matt]
 
 =Assigned to Adam=
 
