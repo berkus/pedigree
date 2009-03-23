@@ -24,11 +24,12 @@
   * ~~Ext2 write support -- [JamesM]~~
 
 =Assigned to Matt=
-  * DHCP daemon rather than one-time client -- [Matt]
+  * Routing tables -- [Matt]
+  * Loopback network device -- [Matt]
   * TCP retransmission queue (proper implementation) -- [Matt] -- *In progress*
-  * Sockets -- [Matt] or [JamesM] -- *In progress*
+  * ~~Sockets -- [Matt] or [JamesM] --~~
   * Signals -- [Matt]
-  * Complete FAT (file creation and deletion, tested writing) -- [Matt]
+  * ~~Complete FAT (file creation and deletion, tested writing) -- [Matt]~~
 
 =Assigned to Adam=
 
