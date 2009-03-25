@@ -25,7 +25,7 @@
 
 =Assigned to Matt=
   * Routing tables -- [Matt]
-  * Loopback network device -- [Matt]
+  * ~~Loopback network device -- [Matt]~~
   * TCP retransmission queue (proper implementation) -- [Matt] -- *In progress*
   * ~~Sockets -- [Matt] or [JamesM] --~~
   * Signals -- [Matt]
