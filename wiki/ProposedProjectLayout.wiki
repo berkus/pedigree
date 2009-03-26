@@ -1,4 +1,4 @@
-#summary An outline of a new project layou
+#summary An outline of a new project tree
 
 *This is part of TkTech's project to clean up & standardize the tree structure as he ports the build to SCons*
 
