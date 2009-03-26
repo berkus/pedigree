@@ -1,0 +1,25 @@
+#summary An outline of a new project layou
+
+*This is part of TkTech's project to clean up & standardize the tree structure as he ports the build to SCons*
+
+
+ * */* - Base directory
+  * */build/* - Contains temporary binaries and the final product. Should _never_ contain anything else.
+   * */build/<Project Name>* - Contains the temporary files specific to each project (aka _kernel_ and _drivers_)
+  * */src/* - Contains the source code for various projects (aka _kernel_.) Each directory in here shall be made as its own product and sub-products.
+   * */src/system/*
+    * */src/system/modules/<Module Name>* - Contains kernel modules
+    * */src/system/kernel/* - Contains the kernel source
+    * */src/system/kernel/arch/${ARCHITECTURE}/* - Contains platform specific code.
+    * */src/system/kernel/arch/${ARCHITECTURE}/common/* - Contains common code for that architecture.
+    * */src/system/kernel/arch/${ARCHITECTURE}/${MACHINE}/* - Contains code for a specific machine.
+    * */src/system/kernel/debugger/`*`* - Contains code for the debugger
+    * */src/system/kernel/linker/`*`* - Contains code for the linker
+    * */src/system/kernel/utilities/`*`* - Contains utility code
+   * */src/subsys/* - Contains compatibility glue
+    * */src/subsys/posix/`*`* - Contains glue for the POSIX layer
+   * */src/drivers/* - Contains drivers for various devices
+    * */src/drivers/common/`*`* - Contains drivers that should be compiled regardless of architecture
+    * */src/drivers/${ARCHITECTURE}/`*`* - Contains drivers for a specific architecture
+   * */src/user/applications/`*`* - Contains userspace applications
+   * */src/user/libraries/`*`* - Contains userspace libraries
