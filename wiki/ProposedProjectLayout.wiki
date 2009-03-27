@@ -25,3 +25,7 @@
    * */src/user/applications/`*`* - Contains userspace applications
    * */src/user/libraries/`*`* - Contains userspace libraries
   * */projects/* - Contains project file's for various IDE's
+
+==Notes==
+ # Folders should always be lowercase.
+ # A common folder should always exist for any architecture or machine.
