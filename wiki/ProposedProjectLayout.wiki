@@ -10,9 +10,10 @@
    * */src/system/*
     * */src/system/modules/<Module Name>* - Contains kernel modules
     * */src/system/kernel/* - Contains the kernel source
-    * */src/system/kernel/arch/${ARCHITECTURE}/* - Contains platform specific code.
-    * */src/system/kernel/arch/${ARCHITECTURE}/common/* - Contains common code for that architecture.
-    * */src/system/kernel/arch/${ARCHITECTURE}/${MACHINE}/* - Contains code for a specific machine.
+    * */src/system/kernel/processor/${ARCH_FAMILY}/common* - Contains code common to all archs of said family
+    * */src/system/kernel/processor/${ARCH_FAMILY}/${ARCHITECTURE}/* - Contains code specific to that architecture.
+    * */src/system/kernel/machine/${ARCH_FAMILY}/common* - Contains code common to all machines of that architecture
+    * */src/system/kernel/machine/${ARCH_FAMILY}/${MACHINE}/* - Contains  code for a specific machine
     * */src/system/kernel/debugger/`*`* - Contains code for the debugger
     * */src/system/kernel/linker/`*`* - Contains code for the linker
     * */src/system/kernel/utilities/`*`* - Contains utility code
