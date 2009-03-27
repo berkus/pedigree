@@ -3,65 +3,48 @@
 
 # Create a new SCons Enviornment object.
 env = Environment()
+# Export 'env' for our subscripts to use
+Export('env')
+# Load build options
+env.SConscript(['BuildOptions.py'])
+# Our buildtools & misc
+env.SConscript(['BuildFlags.py'])
+
 #########################################
-# Setup our environment varibles
+# Setup our script defines
 #########################################
-# The base path
-env['COMPILER_PATH'] = '/usr/cross/bin/i586-elf'
-# C Compiler
-env['CC'] = '$COMPILER_PATH-gcc'
-# C++ Compiler
-env['CXX'] = '$COMPILER_PATH-g++'
-# Assembler
-env['AS'] = 'nasm'
-# Linker
-env['LINK'] = '$COMPILER_PATH-ld'
-#########################################
-# Flags
-#########################################
-# C/C++ shared flags
-env['SHARED_FLAGS'] = '-march=i486 -fno-builtin -fno-stack-protector -nostdlib -m32 -g0 -O3'
-# C flags
-env['CFLAGS'] = '$SHARED_FLAGS'
-# C++ flags
-env['CXXFLAGS'] = '$SHARED_FLAGS -Weffc++ -Wall -Wold-style-cast -Wno-long-long -fno-rtti -fno-exceptions'
-# Assembler flags
-env['ASFLAGS'] = '-f elf'
-# Linker flags
-env['LINKFLAGS'] = '-T src/system/kernel/core/processor/x86/kernel.ld -nostdlib -nostdinc'
-#########################################
-# Source defines
-#########################################
-env['CPPDEFINES'] = ['X86','X86_COMMON','BITS_32','THREADS','MULTIPROCESSOR','DEBUGGER','APIC','ACPI','DEBUGGER_QWERTY','SMBIOS','SMP']
+## This is a piece of shit.
+env['CPPDEFINES'] = []
+
+if env['ARCHITECTURE'] == 'x86':
+    env['CPPDEFINES'] += ['X86']
+    env['CPPDEFINES'] += ['BITS_32']
+    
+if env['MACHINE'] == 'x86':
+    env['CPPDEFINES'] += ['X86_COMMON']
+    
+if env['THREADS'] == 1:
+    env['CPPDEFINES'] += ['THREADS']
+    
+if env['DEBUGGER'] == 1:
+    env['CPPDEFINES'] += ['DEBUGGER']
+    
+if env['DEBUGGER_QWERTY'] == 1:
+    env['CPPDEFINES'] += ['DEBUGGER_QWERTY']
+
+if env['DEBUGGER_QWERTZ'] == 1:
+    env['CPPDEFINES'] += ['DEBUGGER_QWERTZ']
+    
+if env['SMBIOS'] == 1:
+    env['CPPDEFINES'] += ['SMBIOS']
+    
+if env['SMP'] == 1:
+    env['CPPDEFINES'] += ['SMP']
+
 #########################################
 # Setup targets
 #########################################
-### Target 'KERNEL'
-K_DIR = 'src/system/kernel/'
-# Can't just use Glob('src/system/kernel/*.cc') because *Someone* put MIPS and ARM code in the directory -_-
-K_SOURCES  = [K_DIR+'Log.cc',K_DIR+'Archive.cc',K_DIR+'Spinlock.cc']
-K_SOURCES += [Glob(K_DIR + 'core/*.cc')]
-K_SOURCES += [Glob(K_DIR + 'core/processor/x86/*.cc')]
-K_SOURCES += [Glob(K_DIR + 'core/lib/*.c'),Glob(K_DIR + 'core/lib/*.cc')]
-K_SOURCES += [Glob(K_DIR + 'core/utilities/*.cc')]
-K_SOURCES += [Glob(K_DIR + 'debugger/*.cc')]
-K_SOURCES += [Glob(K_DIR + 'linker/*.cc')]
-K_SOURCES += [Glob(K_DIR + 'core/process/*.cc')]
-K_SOURCES += [Glob(K_DIR + 'machine/x86_common/*.cc')]
-
-# Include directories...
-K_INCLUDES  = ['src/system/include']
-K_INCLUDES += ['src/system/include/linker/']
-K_INCLUDES += ['src/system/include/process/']
-K_INCLUDES += [K_DIR]
-K_INCLUDES += [K_DIR + 'core/']
-K_INCLUDES += [K_DIR + 'core/processor/x86/']
-K_INCLUDES += [K_DIR + 'core/process/']
-K_INCLUDES += [K_DIR + 'core/lib/']
-K_INCLUDES += [K_DIR + 'linker/']
-K_INCLUDES += [K_DIR + 'debugger/']
-K_INCLUDES += [K_DIR + 'debugger/commands/']
-K_INCLUDES += [K_DIR + 'machine/x86_common/']
-# Add it as a target
-env.Program(target = 'Kernel' , source = K_SOURCES, CPPPATH = K_INCLUDES)
-### End 'KERNEL'
+## Kernel
+env.SConscript('src/system/kernel/SConscript',variant_dir='build')
+## User
+env.SConscript('src/user/SConscript',variant_dir='build')
