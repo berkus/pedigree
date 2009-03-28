@@ -107,3 +107,4 @@ This page has been created as a quick reference for Pedigree's POSIX subsystem's
 || pclose || no || stubbed ||
 || readlink || no || stubbed ||
 || ftime || no || stubbed ||
+|| sysconf || yes || a lot of entries just return -1 ||
