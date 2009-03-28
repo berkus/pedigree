@@ -105,6 +105,6 @@ This page has been created as a quick reference for Pedigree's POSIX subsystem's
 || inet_pton || no || stubbed ||
 || popen || no || stubbed ||
 || pclose || no || stubbed ||
-|| readlink || no || stubbed ||
+|| readlink || yes || none ||
 || ftime || no || stubbed ||
 || sysconf || yes || a lot of entries just return -1 ||
