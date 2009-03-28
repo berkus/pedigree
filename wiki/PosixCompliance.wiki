@@ -1,0 +1,109 @@
+#summary How compliant is the POSIX subsystem?
+
+= Introduction =
+
+This page has been created as a quick reference for Pedigree's POSIX subsystem's compliancy. If a function is not here, it can be assumed to not exist.
+
+= The List =
+
+|| *Function* || *Implemented?* || *Notes*
+|| ftruncate || no || stubbed
+|| mkdir || yes || does not set errno on failure (Filesystem::createDirectory *should*, but no current implementations do)
+|| close || yes || none
+|| _execve || yes || FD_CLOEXEC descriptors need to be closed in this call
+|| _exit || yes || none
+|| fork || yes || none
+|| fstat || yes || does not set errno on failure
+|| getpid || yes || none
+|| _isatty || yes || should check that the descriptor is actually a tty
+|| kill || no || stubbed
+|| link || no || stubbed
+|| lseek || yes || conditions EOVERFLOW, EINVAL and ESPIPE not checked
+|| open || yes || does not set flags for fcntl
+|| read || yes || none
+|| sbrk || yes || none
+|| stat || yes || none
+|| times OR getrusage || no || stubbed
+|| unlink || yes || does not set errno on failure
+|| wait || yes || none
+|| waitpid || yes || doesn't handle groups (but that's fine)
+|| write || yes || none
+|| lstat || yes || currently synonymous to stat, even when working on a symlink
+|| opendir || yes || none
+|| readdir || yes || none
+|| rewinddir || yes || none
+|| closedir || yes || none
+|| tcgetattr || yes || only supports 4 flags
+|| tcsetattr || yes || see tcgetattr
+|| mkfifo || no || stubbed
+|| gethostname || yes || just puts "pedigree" into the given buffer
+|| ioctl || yes || only implements two commands
+|| tcflow || no || always returns zero
+|| tcflush || no || always returns zero
+|| tcdrain || no || stubbed
+|| gettimeofday || yes || none
+|| getuid || no || always returns zero
+|| getgid || no ||    "          "
+|| geteuid || no ||    "          "
+|| getegid || no ||    "          "
+|| getppid || no ||    "          "
+|| strsignal || yes || none
+|| setuid || no || stubbed
+|| setgid || no || stubbed
+|| sleep || no || stubbed, always returns zero
+|| alarm || no || stubbed, always returns zero
+|| umask || no || stubbed, always returns zero
+|| chmod || no || stubbed
+|| chown || no || stubbed
+|| utime || no || stubbed
+|| sigaction || no || stubbed
+|| access || no || stubbed
+|| pathconf || no || stubbed, always returns zero
+|| fpathconf || no || see pathconf
+|| cfgetospeed || no || stubbed, always returns zero
+|| cfgetispeed || no || stubbed,    "         "
+|| cfsetospeed || no || stubbed,    "         "
+|| cfsetispeed || no || stubbed,    "         "
+|| select || yes || only handles readfds parameters, only uses timeout parameter on sockets
+|| setgrent || no || stubbed
+|| endgrent || no || stubbed
+|| getgrent || no || stubbed
+|| chdir || yes || none
+|| dup || yes || none
+|| dup2 || yes || none
+|| pipe || yes || none
+|| fcntl || yes || partially implemented - no record locking commands
+|| sigprocmask || no || stubbed
+|| fchown || no || stubbed
+|| rmdir || no || stubbed
+|| socket || yes || handles only PF_INET and PF_SOCKET for domain
+|| connect || yes || always blocks
+|| send || yes || errno not set if the connection is reset
+|| recv || yes || see send
+|| accept || yes || always blocks
+|| bind || yes || will not have expected result on listen sockets
+|| getpeername || no || stubbed
+|| getsockopt || no || stubbed
+|| listen || yes || none
+|| recvfrom || no || stubbed
+|| recvmsg || no || stubbed
+|| sendmsg || no || stubbed
+|| sendto || no || stubbed
+|| setsockopt || no || stubbed
+|| shutdown || no || note that connections will still be closed 
+|| sockatmark || no || stubbed
+|| socketpair || no || stubbed
+|| inet_addr || yes || only supports a.b.c.d format
+|| gethostbyaddr || no || partially implemented but no functionality at all
+|| gethostbyname || yes || doesn't set h_aliases
+|| getservbyname || no || stubbed
+|| getgrname || no || stubbed, always returns zero
+|| getgrgid || no || stubbed, always returns zero
+|| symlink || no || stubbed, always returns zero
+|| mknod || no || stubbed, always returns zero
+|| fsync || no || stubbed, always returns zero
+|| inet_pton || no || stubbed
+|| popen || no || stubbed
+|| pclose || no || stubbed
+|| readlink || no || stubbed
+|| ftime || no || stubbed
