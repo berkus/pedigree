@@ -64,7 +64,7 @@ This page has been created as a quick reference for Pedigree's POSIX subsystem's
 || cfgetispeed || no || stubbed,    "         " ||
 || cfsetospeed || no || stubbed,    "         " ||
 || cfsetispeed || no || stubbed,    "         " ||
-|| select || yes || only handles readfds parameters, only uses timeout parameter on sockets ||
+|| select || yes || only handles readfds and writefds parameters, only uses timeout parameter on readfds & sockets ||
 || setgrent || no || stubbed ||
 || endgrent || no || stubbed ||
 || getgrent || no || stubbed ||
