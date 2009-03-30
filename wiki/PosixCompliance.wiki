@@ -85,10 +85,10 @@ This page has been created as a quick reference for Pedigree's POSIX subsystem's
 || getpeername || no || stubbed ||
 || getsockopt || no || stubbed ||
 || listen || yes || none ||
-|| recvfrom || no || stubbed ||
+|| recvfrom || yes || TCP pretends :) ||
 || recvmsg || no || stubbed ||
 || sendmsg || no || stubbed ||
-|| sendto || no || stubbed ||
+|| sendto || yes || TCP sendto will still send to the connected address, not the passed address ||
 || setsockopt || no || stubbed ||
 || shutdown || no || note that connections will still be closed ||
 || sockatmark || no || stubbed ||
