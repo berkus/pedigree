@@ -16,7 +16,6 @@ This page has been created as a quick reference for Pedigree's POSIX subsystem's
 || fstat || yes || does not set errno on failure ||
 || getpid || yes || none ||
 || _isatty || yes || should check that the descriptor is actually a tty ||
-|| kill || no || stubbed ||
 || link || no || stubbed ||
 || lseek || yes || conditions EOVERFLOW, EINVAL and ESPIPE not checked ||
 || open || yes || none ||
@@ -56,7 +55,7 @@ This page has been created as a quick reference for Pedigree's POSIX subsystem's
 || chmod || no || stubbed ||
 || chown || no || stubbed ||
 || utime || no || stubbed ||
-|| sigaction || no || stubbed ||
+|| sigaction || yes || ready for actual code, gets to kernel system call then returns error code ||
 || access || no || stubbed ||
 || pathconf || no || stubbed, always returns zero ||
 || fpathconf || no || see pathconf ||
@@ -108,3 +107,6 @@ This page has been created as a quick reference for Pedigree's POSIX subsystem's
 || readlink || yes || none ||
 || ftime || no || stubbed ||
 || sysconf || yes || a lot of entries just return -1 ||
+|| signal || yes || none ||
+|| raise || yes || none ||
+|| kill || yes || none ||
