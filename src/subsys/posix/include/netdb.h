@@ -53,6 +53,7 @@ extern int h_errno;
 #define NO_DATA           2
 #define NO_RECOVERY       3
 #define TRY_AGAIN         4
+#define NO_ADDRESS        5
 
 void             endhostent(void);
 void             endnetent(void);

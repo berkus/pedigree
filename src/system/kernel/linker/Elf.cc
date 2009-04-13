@@ -60,7 +60,7 @@ bool Elf::create(uint8_t *pBuffer, size_t length)
 {
   // The main header will be at pBuffer[0].
   ElfHeader_t *pHeader = reinterpret_cast<ElfHeader_t *>(pBuffer);
-
+  NOTICE("Here -1");
   // Check the ident.
   if ( (pHeader->ident[1] != 'E') ||
        (pHeader->ident[2] != 'L') ||
@@ -513,7 +513,7 @@ bool Elf::finaliseModule(uint8_t *pBuffer, uint32_t length)
   return relocate(pBuffer, length);
 }
 
-bool Elf::allocate(uint8_t *pBuffer, size_t length, uintptr_t &loadBase, SymbolTable *pSymtab, Process *pProcess)
+bool Elf::allocate(uint8_t *pBuffer, size_t length, uintptr_t &loadBase, SymbolTable *pSymtab, Process *pProcess, uintptr_t *pStart, size_t *pExtent, bool doAllocate)
 {
   if (!pProcess) pProcess = Processor::information().getCurrentThread()->getParent();
 
@@ -548,15 +548,21 @@ bool Elf::allocate(uint8_t *pBuffer, size_t length, uintptr_t &loadBase, SymbolT
       return false;
   }
 
-  uintptr_t loadAddr = (loadBase==0) ? start : loadBase;
-  for (unsigned int j = loadAddr; j < loadAddr+size+0x1000; j += 0x1000)
+  if (pStart) *pStart = (loadBase==0) ? start : loadBase;
+  if (pExtent) *pExtent = size;
+
+  if (doAllocate)
   {
-    physical_uintptr_t phys = PhysicalMemoryManager::instance().allocatePage();
-    bool b = Processor::information().getVirtualAddressSpace().map(phys,
-                                                                   reinterpret_cast<void*> (j&0xFFFFF000),
-                                                                   VirtualAddressSpace::Write);
-    if (!b)
+    uintptr_t loadAddr = (loadBase==0) ? start : loadBase;
+    for (unsigned int j = loadAddr; j < loadAddr+size+0x1000; j += 0x1000)
+    {
+      physical_uintptr_t phys = PhysicalMemoryManager::instance().allocatePage();
+      bool b = Processor::information().getVirtualAddressSpace().map(phys,
+                                                                     reinterpret_cast<void*> (j&0xFFFFF000),
+                                                                     VirtualAddressSpace::Write);
+      if (!b)
       WARNING("map() failed for address " << Hex << j);
+    }
   }
 
   if (m_pDynamicSymbolTable && m_pDynamicStringTable)
@@ -639,30 +645,32 @@ bool Elf::load(uint8_t *pBuffer, size_t length, uintptr_t loadBase, SymbolTable 
       uintptr_t sectionStart = (loadAddr >= nStart) ? loadAddr : nStart;
 
       uintptr_t offset = m_pProgramHeaders[i].offset + (sectionStart-loadAddr);
+
       uintptr_t filesz = (loadAddr+m_pProgramHeaders[i].filesz >= nEnd)
                                                       ? (nEnd-sectionStart)
                                                       : (loadAddr+m_pProgramHeaders[i].filesz-sectionStart);
+      if (loadAddr+m_pProgramHeaders[i].filesz < nStart) filesz = 0;
+
       uintptr_t memsz = (loadAddr+m_pProgramHeaders[i].memsz >= nEnd)
                                                       ? (nEnd-sectionStart)
                                                       : (loadAddr+m_pProgramHeaders[i].memsz-sectionStart);
 
-        // Copy segment data from the file.
-        memcpy (reinterpret_cast<uint8_t*> (sectionStart),
-                &pBuffer[offset],
-                filesz);
-
-        memset (reinterpret_cast<uint8_t*> (sectionStart+filesz),
-                0,
-                memsz-filesz);
+      // Copy segment data from the file.
+      memcpy (reinterpret_cast<uint8_t*> (sectionStart),
+              &pBuffer[offset],
+              filesz);
+      
+      memset (reinterpret_cast<uint8_t*> (sectionStart+filesz),
+              0,
+              memsz-filesz);
 
 #if defined(PPC_COMMON) || defined(MIPS_COMMON)
-        Processor::flushDCacheAndInvalidateICache(loadAddr, loadAddr+m_pProgramHeaders[i].filesz);
+      Processor::flushDCacheAndInvalidateICache(loadAddr, loadAddr+m_pProgramHeaders[i].filesz);
 #endif
       }
   }
 
   // Apply relocations for the given area.
-  /// \todo Ensure that this only covers the given area, no more.
 
   // Is it a relocation section?
   if (m_pRelTable)
@@ -672,7 +680,7 @@ bool Elf::load(uint8_t *pBuffer, size_t length, uintptr_t loadBase, SymbolTable 
           pRel < (m_pRelTable+(m_nRelTableSize/sizeof(ElfRel_t)));
           pRel++)
     {
-      if ( (pRel->offset + loadBase < nStart) || (pRel->offset + loadBase > nEnd) )
+      if ( (pRel->offset + loadBase < nStart) || (pRel->offset + loadBase >= nEnd) )
         continue;
       if (!applyRelocation(*pRel, 0, pSymtab, loadBase))
         return false;
@@ -686,6 +694,8 @@ bool Elf::load(uint8_t *pBuffer, size_t length, uintptr_t loadBase, SymbolTable 
           pRel < (m_pRelaTable+(m_nRelaTableSize/sizeof(ElfRela_t)));
           pRel++)
     {
+      if ( (pRel->offset + loadBase < nStart) || (pRel->offset + loadBase >= nEnd) )
+        continue;
       if (!applyRelocation(*pRel, 0, pSymtab, loadBase))
         return false;
     }
@@ -699,6 +709,8 @@ bool Elf::load(uint8_t *pBuffer, size_t length, uintptr_t loadBase, SymbolTable 
     for (size_t i = 0; i < m_nPltSize/sizeof(ElfRel_t); i++, pRel++)
     {
       uintptr_t *address = reinterpret_cast<uintptr_t*> (loadBase + pRel->offset);
+      if ( (pRel->offset + loadBase < nStart) || (pRel->offset + loadBase >= nEnd) )
+        continue;
       *address += loadBase;
     }
   }
@@ -709,6 +721,8 @@ bool Elf::load(uint8_t *pBuffer, size_t length, uintptr_t loadBase, SymbolTable 
     for (size_t i = 0; i < m_nPltSize/sizeof(ElfRela_t); i++, pRel++)
     {
       uintptr_t *address = reinterpret_cast<uintptr_t*> (loadBase + pRel->offset);
+      if ( (pRel->offset + loadBase < nStart) || (pRel->offset + loadBase >= nEnd) )
+        continue;
       *address += loadBase;
     }
   }

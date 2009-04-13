@@ -1198,3 +1198,72 @@ int poll(struct pollfd fds[], unsigned int nfds, int timeout)
   return syscall3(POSIX_POLL, fds, nfds, timeout);
 }
 
+int getrlimit(int resource, struct rlimit *rlp)
+{
+  STUBBED("getrlimit");
+  errno = ENOSYS;
+  return -1;
+}
+
+int setrlimit(int resource, const struct rlimit *rlp)
+{
+  STUBBED("getrlimit");
+  errno = ENOSYS;
+  return -1;
+}
+
+int glob (const char *a, int b, int (*c)(const char *, int), struct glob_t* d)
+{
+  STUBBED("glob");
+  errno = ENOSYS;
+  return -1;
+}
+
+int globfree(struct glob_t *e)
+{
+  STUBBED("globfree");
+  errno = ENOSYS;
+  return -1;
+}
+
+int getpgrp()
+{
+  STUBBED("getpgrp");
+  errno = ENOSYS;
+  return -1;
+}
+
+int setpgrp()
+{
+  STUBBED("setpgrp");
+  errno = ENOSYS;
+  return -1;
+}
+
+int crypt()
+{
+  STUBBED("crypt");
+  errno = ENOSYS;
+  return -1;
+}
+
+int fchmod()
+{
+  STUBBED("fchmod");
+  errno = ENOSYS;
+  return -1;
+}
+
+int tcgetpgrp()
+{
+  STUBBED("tcgetpgrp");
+  errno = ENOSYS;
+  return -1;
+}
+
+int setpgid()
+{
+  STUBBED("setpgid");
+  errno = ENOSYS;
+  return -1;
+}

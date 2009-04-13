@@ -266,6 +266,7 @@ bool X86VirtualAddressSpace::doIsMapped(void *virtualAddress)
   // Is a page present?
   return ((*pageTableEntry & PAGE_PRESENT) == PAGE_PRESENT);
 }
+bool bjjhhhh = false;
 bool X86VirtualAddressSpace::doMap(physical_uintptr_t physicalAddress,
                                    void *virtualAddress,
                                    size_t flags)
@@ -297,7 +298,7 @@ bool X86VirtualAddressSpace::doMap(physical_uintptr_t physicalAddress,
     g_EscrowPages[Processor::id()] = 0;
 
     // Map the page
-    *pageDirectoryEntry = page | (Flags & ~(PAGE_GLOBAL | PAGE_SWAPPED | PAGE_COPY_ON_WRITE));
+    *pageDirectoryEntry = page | (Flags & ~(PAGE_GLOBAL | PAGE_SWAPPED | PAGE_COPY_ON_WRITE) | PAGE_WRITE);
 
     // Zero the page table
     memset(PAGE_TABLE_ENTRY(m_VirtualPageTables, pageDirectoryIndex, 0),
@@ -513,8 +514,25 @@ VirtualAddressSpace *X86VirtualAddressSpace::clone()
       if (getKernelAddressSpace().isMapped(virtualAddress))
         continue;
 
+      // Copy on write...
+      if ((*pageTableEntry & PAGE_COPY_ON_WRITE) == PAGE_COPY_ON_WRITE)
+      {
+        // Cache the physical address.
+        physical_uintptr_t physicalAddress = PAGE_GET_PHYSICAL_ADDRESS(pageTableEntry);
+        
+        // Change to the new, cloned address space.
+        Processor::switchAddressSpace(*pClone);
+
+        // Map in.
+        pClone->map(physicalAddress, virtualAddress, fromFlags(flags));
+
+        // Switch back.
+        Processor::switchAddressSpace(thisAddressSpace);
+
+        continue;
+      }
+
       // Page mapped in source address space, but not in kernel.
-      /// \todo Copy on write.
       physical_uintptr_t newFrame = PhysicalMemoryManager::instance().allocatePage();
 
       // Temporarily map in.
@@ -555,9 +573,9 @@ void X86VirtualAddressSpace::revertToKernelAddressSpace()
 
     for (uintptr_t j = 0; j < 1024; j++)
     {
-      uint32_t *pageTableEntry = PAGE_TABLE_ENTRY(m_VirtualPageTables, i, j);
+      uint32_t pageTableEntry = * PAGE_TABLE_ENTRY(m_VirtualPageTables, i, j);
 
-      if ((*pageTableEntry & PAGE_PRESENT) != PAGE_PRESENT)
+      if ((pageTableEntry & PAGE_PRESENT) != PAGE_PRESENT)
         continue;
 
       void *virtualAddress = reinterpret_cast<void*> ( ((i*1024)+j)*4096 );
@@ -565,14 +583,16 @@ void X86VirtualAddressSpace::revertToKernelAddressSpace()
         continue;
 
       // Grab the physical address for it.
-      physical_uintptr_t physicalAddress = PAGE_GET_PHYSICAL_ADDRESS(pageTableEntry);
+      physical_uintptr_t physicalAddress = PAGE_GET_PHYSICAL_ADDRESS(&pageTableEntry);
 
       // Page mapped in this address space but not in kernel. Unmap it.
       unmap(virtualAddress);
 
-      // And release the physical memory.
-      /// \todo There's going to be a caveat with CoW here...
-      PhysicalMemoryManager::instance().freePage(physicalAddress);
+      if ((pageTableEntry & PAGE_COPY_ON_WRITE) != PAGE_COPY_ON_WRITE)
+      {
+        // And release the physical memory.
+        PhysicalMemoryManager::instance().freePage(physicalAddress);
+      }
     }
   }
 }

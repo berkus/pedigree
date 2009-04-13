@@ -14,24 +14,12 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <Module.h>
-#include <Log.h>
-#include <processor/Processor.h>
-#include "PosixSyscallManager.h"
+#include "Image.h"
 
-PosixSyscallManager g_PosixSyscallManager;
-
-void init()
-{
-  NOTICE("Initialising");
-  g_PosixSyscallManager.initialise();
-}
-
-void destroy()
+Image::Image()
 {
 }
 
-MODULE_NAME("posix");
-MODULE_ENTRY(&init);
-MODULE_EXIT(&destroy);
-MODULE_DEPENDS("console", "TUI", "image");
+Image::~Image()
+{
+}

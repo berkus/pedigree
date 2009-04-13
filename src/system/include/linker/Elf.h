@@ -173,8 +173,10 @@ public:
    * Performs the prerequisite allocation for any normal ELF file - library or executable.
    * For a library, this allocates loadBase, and allocates memory for the entire object - this is not
    * filled however.
+   *
+   * If doAllocate is false, the memory will not be allocated at all.
    */
-  bool allocate(uint8_t *pBuffer, size_t length, uintptr_t &loadBase, SymbolTable *pSymtab=0, class Process *pProcess=0);
+  bool allocate(uint8_t *pBuffer, size_t length, uintptr_t &loadBase, SymbolTable *pSymtab=0, class Process *pProcess=0, size_t *pStart=0, size_t *pExtent=0, bool doAllocate=true);
   
   /**
    * Loads (part) of a 'normal' file. This could be an executable or a library. By default the entire file

@@ -179,7 +179,7 @@ int posix_connect(int sock, struct sockaddr* address, size_t addrlen)
     struct sockaddr_in* sin = reinterpret_cast<struct sockaddr_in*>(address);
     remoteHost.remotePort = BIG_TO_HOST16(sin->sin_port);
     remoteHost.ip.setIp(sin->sin_addr.s_addr);
-
+    NOTICE("Connecting to IP " << remoteHost.ip.toString());
     success = p->connect(remoteHost, blocking);
 
     if(!blocking)
