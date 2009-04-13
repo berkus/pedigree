@@ -62,16 +62,16 @@ Vt100::~Vt100()
 
 void Vt100::write(char *str)
 {
-   String s(str);
-   char *pStr = const_cast<char*>(static_cast<const char*>(s));
-   int j = s.length();
-   for (int i = 0; i < j; i++)
-   {
-     if(pStr[i] == '\e') pStr[i] = '\\';
-     if (pStr[i] < 0x20) pStr[i] = '#';
-     if (i == 60) {char a = pStr[i]; pStr[i] = '\0';NOTICE("W: " << pStr); pStr[i] = a; i -= 60; j -= 60; pStr = &pStr[60];}
-   }
-   NOTICE("W: " << pStr);
+//   String s(str);
+//   char *pStr = const_cast<char*>(static_cast<const char*>(s));
+//   int j = s.length();
+//   for (int i = 0; i < j; i++)
+//   {
+//     if(pStr[i] == '\e') pStr[i] = '\\';
+//     if (pStr[i] < 0x20) pStr[i] = '#';
+//     if (i == 60) {char a = pStr[i]; pStr[i] = '\0';NOTICE("W: " << pStr); pStr[i]/ = a; i -= 60; j -= 60; pStr = &pStr[60];}
+//   }
+//   NOTICE("W: " << pStr);
 
   while (*str)
     write(*str++);

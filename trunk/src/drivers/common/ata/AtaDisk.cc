@@ -171,18 +171,54 @@ bool AtaDisk::initialise()
 
 uint64_t AtaDisk::read(uint64_t location, uint64_t nBytes, uintptr_t buffer)
 {
+  // Do we have all of these sectors in cache?
+  // \bug Cache key is 32-bits long in x86, but the valid key range is 64 - lg(512) bits.
+  uint64_t end = location+nBytes;
+  uint64_t _location = location;
+  uint64_t _nBytes = nBytes;
+  uintptr_t _buffer = buffer;
+  for (uint64_t i = location; i < end; i += 512)
+  {
+    if (m_SectorCache.lookup(i/512, reinterpret_cast<uint8_t*> (buffer)))
+    {
+      buffer += 512;
+      location += 512;
+      nBytes -= 512;
+    }
+    else break;
+  }
+
+  if (nBytes == 0) return _nBytes;
+
   // Grab our parent.
   AtaController *pParent = static_cast<AtaController*> (m_pParent);
-  return pParent->addRequest(ATA_CMD_READ, reinterpret_cast<uint64_t> (this), location,
-                             nBytes, static_cast<uint64_t> (buffer));
+  return pParent->addRequest(ATA_CMD_READ, reinterpret_cast<uint64_t> (this), _location,
+                             _nBytes, static_cast<uint64_t> (_buffer));
 }
 
 uint64_t AtaDisk::write(uint64_t location, uint64_t nBytes, uintptr_t buffer)
 {
-  // Grab our parent.
-  AtaController *pParent = static_cast<AtaController*> (m_pParent);
-  return pParent->addRequest(ATA_CMD_WRITE, reinterpret_cast<uint64_t> (this), location,
-                             nBytes, static_cast<uint64_t> (buffer));
+  static Mutex mutex;
+
+  mutex.acquire();
+  if (location % 512)
+    panic("AtaDisk: write request not on a sector boundary!");
+  if (nBytes % 512)
+    panic("AtaDisk: write request length not a multiple of 512!");
+
+  uint64_t origNBytes = nBytes;
+
+  uint64_t end = location+nBytes;
+  for (uint64_t i = location; i < end; i += 512)
+  {
+    m_SectorCache.insert(i/512, reinterpret_cast<uint8_t*> (buffer));
+
+    buffer += 512;
+    location += 512;
+    nBytes -= 512;
+  }
+  mutex.release();
+  return origNBytes;
 }
 
 uint64_t AtaDisk::doRead(uint64_t location, uint64_t nBytes, uintptr_t buffer)

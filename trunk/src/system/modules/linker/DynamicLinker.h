@@ -31,19 +31,9 @@ public:
   /** Retrieves the singleton instance. */
   static DynamicLinker &instance() {return m_Instance;}
 
-  void setInitProcess(Process *pProcess);
+  bool initialiseLibrary(Elf *pElf, uintptr_t loadBase);
 
-  /** Loads a shared library into the current process' address space.
-
-      If pProcess is non-zero, the linker assumes it is operating in pProcess'
-      address space, not the current process'. This is the case in init, where
-      the first process gets launched.
-
-      The linker will assume this until registerElf is called. */
-  bool load(const char *name, Process *pProcess=0);
-
-  /** Registers the given Elf with the current Process, or load()'s pProcess if that was
-      non-zero. */
+  /** Registers the given Elf with the current Process. */
   void registerElf(Elf *pElf);
   
   /** Initialises the ELF. */
@@ -57,7 +47,6 @@ public:
 
   /** Dynamic resolver function, to be given to ElfXX::relocateDynamic. */
   uintptr_t resolve(const char *sym);
-  //static uintptr_t resolveNoElf(const char *sym, bool useElf);
 
   /** Callback given to KernelCoreSyscallManager to resolve PLT relocations lazily. */
   static uintptr_t resolvePlt(SyscallState &state);
@@ -92,10 +81,6 @@ private:
     SharedObject &operator=(const DynamicLinker&);
   };
 
-  SharedObject *loadInternal (const char *name);
-  SharedObject *loadObject (const char *name);
-  SharedObject *mapObject (SharedObject *pSo);
-
   uintptr_t resolveInLibrary(const char *sym, SharedObject *obj);
 
   /** Resolves a reference. */
@@ -109,9 +94,6 @@ private:
   Tree<Process*,List<SharedObject*>*> m_ProcessObjects;
   List<SharedObject*> m_Objects;
   Tree<Process*,Elf*> m_ProcessElfs;
-
-  /** Non-zero if load() was called with pProcess != 0, in which case it holds the value of pProcess. */
-  Process *m_pInitProcess;
 
   static DynamicLinker m_Instance;
 };

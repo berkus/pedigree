@@ -40,6 +40,9 @@
 #include <machine/Machine.h>
 
 #include <users/UserManager.h>
+#include <image/ImageTrapManager.h>
+#include <image/ProcessImage.h>
+#include <image/ProcessImageCacheManager.h>
 //
 // Syscalls pertaining to system operations.
 //
@@ -119,6 +122,9 @@ int posix_fork(ProcessorState state)
     SYSCALL_ERROR(OutOfMemory);
     return -1;
   }
+
+  // Make sure all process images are copied.
+  ImageTrapManager::instance().clone(pProcess->getAddressSpace());
 
   // Register with the dynamic linker.
   DynamicLinker::instance().registerProcess(pProcess);
@@ -211,28 +217,28 @@ int posix_execve(const char *name, const char **argv, const char **env, SyscallS
   }
 
   // Attempt to load the file.
-  uint8_t *buffer = new uint8_t[file->getSize()+1];
+//  uint8_t *buffer = new uint8_t[file->getSize()+1];
 
-  if (buffer == 0)
-  {
-    SYSCALL_ERROR(OutOfMemory);
-  }
+//  if (buffer == 0)
+//  {
+//    SYSCALL_ERROR(OutOfMemory);
+//  }
 
-  if (file->read(0, file->getSize(), reinterpret_cast<uintptr_t>(buffer)) != file->getSize())
-  {
-    delete [] buffer;
-    SYSCALL_ERROR(TooBig);
-    return -1;
-  }
+//  if (file->read(0, file->getSize(), reinterpret_cast<uintptr_t>(buffer)) != file->getSize())
+//  {
+//    delete [] buffer;
+//    SYSCALL_ERROR(TooBig);
+//    return -1;
+//  }
 
-  Elf *elf = new Elf();
-  if (!elf->create(buffer, file->getSize()))
-  {
-    // Error - bad file.
-    delete [] buffer;
-    SYSCALL_ERROR(ExecFormatError);
-    return -1;
-  }
+//  Elf *elf = new Elf();
+//  if (!elf->create(buffer, file->getSize()))
+//  {
+//    // Error - bad file.
+//    delete [] buffer;
+//    SYSCALL_ERROR(ExecFormatError);
+//    return -1;
+//  }
 
   pProcess->description() = String(name);
 
@@ -246,35 +252,45 @@ int posix_execve(const char *name, const char **argv, const char **env, SyscallS
 
   pProcess->getAddressSpace()->revertToKernelAddressSpace();
 
-  uintptr_t loadBase;
-  if (!elf->allocate(buffer, file->getSize(), loadBase))
-  {
+  //uintptr_t loadBase;
+  //if (!elf->allocate(buffer, file->getSize(), loadBase))
+  //{
     // Error
-    delete [] buffer;
+    //  delete [] buffer;
     // Time to kill the task.
-    ERROR("Could not allocate memory for ELF file.");
+    //ERROR("Could not allocate memory for ELF file.");
 
-    return -1;
-  }
+    //return -1;
+    // }
 
   DynamicLinker::instance().unregisterProcess(pProcess);
 
-  DynamicLinker::instance().registerElf(elf);
+  //DynamicLinker::instance().registerElf(elf);
 
-  List<char*> neededLibraries = elf->neededLibraries();
-  for (List<char*>::Iterator it = neededLibraries.begin();
-       it != neededLibraries.end();
-       it++)
+  //List<char*> neededLibraries = elf->neededLibraries();
+  //for (List<char*>::Iterator it = neededLibraries.begin();
+  //     it != neededLibraries.end();
+  //     it++)
+  // {
+  //if (!DynamicLinker::instance().load(*it))
+  //  {
+  //    ERROR("Shared dependency '" << *it << "' not found.");
+
+//  return -1;
+  //  }
+//}
+
+  //elf->load(buffer, file->getSize(), loadBase, elf->getSymbolTable());
+
+  ImageTrapManager::instance().removeAll();
+
+  ProcessImage *pProcessImage = ProcessImageCacheManager::instance().getImage(file);
+  if (!pProcessImage || !pProcessImage->isValid())
   {
-    if (!DynamicLinker::instance().load(*it))
-    {
-      ERROR("Shared dependency '" << *it << "' not found.");
-
-      return -1;
-    }
+    FATAL("Execve failed.");
+    return -1;
   }
-
-  elf->load(buffer, file->getSize(), loadBase, elf->getSymbolTable());
+  pProcessImage->load();
 
   // Close all FD_CLOEXEC descriptors. Done here because from this point we're committed to running -
   // there's no further return until the end of the function.
@@ -288,7 +304,7 @@ int posix_execve(const char *name, const char **argv, const char **env, SyscallS
         posix_close(reinterpret_cast<int>(it.key()));
   }
 
-  DynamicLinker::instance().initialiseElf(elf);
+//  DynamicLinker::instance().initialiseElf(elf);
 
   // Create a new stack.
   for (int j = 0; j < STACK_START-STACK_END; j += PhysicalMemoryManager::getPageSize())
@@ -319,12 +335,12 @@ int posix_execve(const char *name, const char **argv, const char **env, SyscallS
 
   ProcessorState pState = state;
   pState.setStackPointer(STACK_START-8);
-  pState.setInstructionPointer(elf->getEntryPoint());
+  pState.setInstructionPointer(pProcessImage->getMainElf()->getEntryPoint());
 
   StackFrame::construct(pState, 0, 2, argv, env);
 
   state.setStackPointer(pState.getStackPointer());
-  state.setInstructionPointer(elf->getEntryPoint());
+  state.setInstructionPointer(pProcessImage->getMainElf()->getEntryPoint());
 
   /// \todo Can this go somewhere other than 0x50000000? Stack perhaps?
   physical_uintptr_t phys = PhysicalMemoryManager::instance().allocatePage();
@@ -597,7 +613,7 @@ int pedigree_login(int uid, const char *password)
 
 int posix_sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 {
-  NOTICE("sigaction(" << Dec << sig << Hex << ")");
+//  NOTICE("sigaction(" << Dec << sig << Hex << ")");
 
   Thread* pThread = Processor::information().getCurrentThread();
   Process* pProcess = pThread->getParent();
@@ -728,7 +744,7 @@ int posix_kill(int pid, int sig)
 
 int posix_sigprocmask(int how, const uint32_t *set, uint32_t *oset)
 {
-  NOTICE("sigprocmask");
+//  NOTICE("sigprocmask");
 
   uint32_t currMask = Processor::information().getCurrentThread()->getParent()->getSignalMask();
 
@@ -812,13 +828,13 @@ uintptr_t posix_dlopen(const char* file, int mode, void* p)
 {
   NOTICE("dlopen(" << file << ")");
 
-  if(!DynamicLinker::instance().load(file))
-  {
-    ERROR("dlopen: couldn't load " << String(file) << ".");
-    return 0;
-  }
-  
-  dlHandle* handle = reinterpret_cast<dlHandle*>(p);
+//  if(!DynamicLinker::instance().load(file))
+//  {
+//    ERROR("dlopen: couldn't load " << String(file) << ".");
+//    return 0;
+//  }
+  FATAL("Re-implement.");
+  dlHandle* handle = 0; reinterpret_cast<dlHandle*>(p);
   
   return reinterpret_cast<uintptr_t>(handle);
 }
